@@ -198,7 +198,7 @@ function showScreen(id) {
 }
 
 document.getElementById('btn-login').addEventListener('click', () => {
-  const redirect = encodeURIComponent(window.location.origin + '/admin.html');
+  const redirect = encodeURIComponent('https://42woman.netlify.app/admin.html');
   window.location.href =
     `https://api.intra.42.fr/oauth/authorize?client_id=${CLIENT_ID}` +
     `&redirect_uri=${redirect}&response_type=code&scope=public`;
@@ -285,7 +285,7 @@ async function main() {
   try {
     const res = await fetch('/.netlify/functions/token', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code, redirectUri: window.location.origin + '/admin.html' })
+      body: JSON.stringify({ code, redirectUri: 'https://42woman.netlify.app/admin.html' })
     });
     const data = await res.json();
     const user = data.user;
