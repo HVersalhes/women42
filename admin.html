@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Women42 — Admin 👑</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose-d: #c2607a; --gold: #d4a843; --cream: #fdf6ee;
+    --brown: #5a3540; --text: #3a2030; --muted: #9a7080;
+    --green: #4caf82; --red: #e05252;
+  }
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--cream); color:var(--text); font-family:'Cormorant Garamond',serif; min-height:100vh; }
+  #screen-login { display:none; }
+  #screen-loading { display:none; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; gap:20px; }
+  .ring { width:56px; height:56px; border:3px solid rgba(212,168,67,.2); border-top-color:var(--gold); border-right-color:var(--rose-d); border-radius:50%; animation:spin 1s linear infinite; }
+  @keyframes spin { to{transform:rotate(360deg)} }
+  .loading-txt { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--brown); font-style:italic; }
+  #screen-denied { display:none; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; text-align:center; padding:24px; }
+  #screen-denied h2 { font-family:'Playfair Display',serif; font-size:2rem; color:var(--red); margin-bottom:12px; }
+  #screen-denied p { color:var(--muted); font-size:1.1rem; }
+  #screen-admin { display:none; flex-direction:column; min-height:100vh; }
+  .admin-header {
+    background:linear-gradient(135deg,var(--rose-d),var(--gold));
+    color:white; padding:clamp(16px,3vw,24px) clamp(16px,4vw,32px);
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
+    position:sticky; top:0; z-index:100;
+    box-shadow:0 4px 20px rgba(194,96,122,.3);
+  }
+  .admin-header h1 { font-family:'Playfair Display',serif; font-size:clamp(1.2rem,3vw,1.6rem); }
+  .admin-stats { display:flex; gap:16px; flex-wrap:wrap; }
+  .stat { background:rgba(255,255,255,.2); border-radius:12px; padding:6px 16px; font-size:.85rem; text-align:center; }
+  .stat strong { display:block; font-size:1.3rem; font-family:'Playfair Display',serif; }
+  .admin-body { padding:clamp(16px,4vw,32px); display:flex; flex-direction:column; gap:32px; max-width:1200px; margin:0 auto; width:100%; }
+  .section-title { font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--brown); margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+  .badge { background:var(--rose-d); color:white; border-radius:50px; padding:2px 10px; font-size:.8rem; font-family:'Cormorant Garamond',serif; }
+  .empty-msg { color:var(--muted); font-style:italic; font-size:1rem; padding:20px 0; }
+  .pending-list { display:flex; flex-direction:column; gap:12px; }
+  .pending-card {
+    background:white; border:1px solid rgba(212,168,67,.2); border-radius:16px;
+    padding:16px 20px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+    box-shadow:0 4px 16px rgba(194,96,122,.06); animation:slideIn .4s ease both;
+  }
+  @keyframes slideIn { from{opacity:0;transform:translateX(-16px)} to{opacity:1;transform:translateX(0)} }
+  .pending-photo { width:52px; height:52px; border-radius:50%; object-fit:cover; border:2px solid var(--gold); flex-shrink:0; }
+  .pending-info { flex:1; min-width:0; }
+  .pending-name { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--brown); }
+  .pending-login { font-size:.8rem; color:var(--muted); letter-spacing:1px; }
+  .pending-campus { font-size:.8rem; color:var(--gold); font-style:italic; }
+  .pending-time { font-size:.75rem; color:var(--muted); }
+  .pending-actions { display:flex; gap:8px; flex-shrink:0; }
+  .btn-approve { background:var(--green); color:white; border:none; border-radius:50px; padding:8px 20px; font-family:'Playfair Display',serif; font-size:.9rem; cursor:pointer; transition:.2s; white-space:nowrap; }
+  .btn-approve:hover { opacity:.85; transform:scale(1.04); }
+  .btn-reject { background:var(--red); color:white; border:none; border-radius:50px; padding:8px 20px; font-family:'Playfair Display',serif; font-size:.9rem; cursor:pointer; transition:.2s; white-space:nowrap; }
+  .btn-reject:hover { opacity:.85; transform:scale(1.04); }
+  .mural-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(clamp(80px,15vw,110px), 1fr)); gap:clamp(12px,2vw,20px); }
+  .mural-item { display:flex; flex-direction:column; align-items:center; gap:8px; animation:riseIn .5s ease both; }
+  @keyframes riseIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+  .mural-item img { width:clamp(64px,12vw,90px); height:clamp(64px,12vw,90px); border-radius:50%; object-fit:cover; border:3px solid white; box-shadow:0 0 0 2px var(--gold); transition:.2s; }
+  .mural-item img:hover { transform:scale(1.08); box-shadow:0 0 0 3px var(--rose-d); }
+  .mural-item span { font-size:clamp(.65rem,1.5vw,.8rem); color:var(--brown); text-align:center; font-family:'Playfair Display',serif; }
+  .refresh-btn { background:transparent; border:1px solid rgba(212,168,67,.4); color:var(--muted); padding:8px 20px; border-radius:50px; font-family:'Cormorant Garamond',serif; font-size:.9rem; cursor:pointer; transition:.2s; align-self:flex-start; }
+  .refresh-btn:hover { border-color:var(--gold); color:var(--gold); }
+</style>
+</head>
+<body>
+
+<div id="screen-login"></div>
+
+<div id="screen-loading" style="display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:20px;">
+  <div class="ring"></div>
+  <p class="loading-txt" id="loading-txt">A verificar identidade...</p>
+</div>
+
+<div id="screen-denied" style="display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:24px;">
+  <h2>🚫 Acesso Negado</h2>
+  <p>Este painel é exclusivo para o administrador.</p>
+</div>
+
+<div id="screen-admin" style="display:none;flex-direction:column;min-height:100vh;">
+  <div class="admin-header">
+    <h1>👑 Women42 — Admin</h1>
+    <div class="admin-stats">
+      <div class="stat"><strong id="count-pending">0</strong>Pendentes</div>
+      <div class="stat"><strong id="count-approved">0</strong>Aprovadas</div>
+      <div class="stat"><strong id="count-total">0</strong>Total</div>
+    </div>
+  </div>
+  <div class="admin-body">
+    <div>
+      <div class="section-title">
+        🔔 Pendentes de aprovação
+        <span class="badge" id="pending-badge">0</span>
+      </div>
+      <div class="pending-list" id="pending-list">
+        <p class="empty-msg">Nenhuma cadete pendente. 🌸</p>
+      </div>
+    </div>
+    <div>
+      <div class="section-title">🌸 Cadetes aprovadas</div>
+      <div class="mural-grid" id="mural-grid">
+        <p class="empty-msg">Nenhuma cadete aprovada ainda.</p>
+      </div>
+    </div>
+    <button class="refresh-btn" id="btn-refresh">↻ Atualizar</button>
+  </div>
+</div>
+
+<script>
+const ADMIN_LOGIN = "hcosta";
+let adminLogin = null;
+let autoRefresh = null;
+
+function showScreen(id) {
+  ['screen-login','screen-loading','screen-denied','screen-admin'].forEach(s => {
+    document.getElementById(s).style.display = 'none';
+  });
+  document.getElementById(id).style.display = 'flex';
+  document.getElementById(id).style.flexDirection = 'column';
+}
+
+document.getElementById('btn-refresh').addEventListener('click', loadData);
+
+async function loadData() {
+  try {
+    const res = await fetch(`/.netlify/functions/admin-data?admin=${adminLogin}`);
+    const { cadetes } = await res.json();
+    const pending  = cadetes.filter(c => c.status === 'pending');
+    const approved = cadetes.filter(c => c.status === 'approved');
+    document.getElementById('count-pending').textContent  = pending.length;
+    document.getElementById('count-approved').textContent = approved.length;
+    document.getElementById('count-total').textContent    = cadetes.length;
+    document.getElementById('pending-badge').textContent  = pending.length;
+    const pendingList = document.getElementById('pending-list');
+    if (pending.length === 0) {
+      pendingList.innerHTML = '<p class="empty-msg">Nenhuma cadete pendente. 🌸</p>';
+    } else {
+      pendingList.innerHTML = pending.map(c => `
+        <div class="pending-card" id="card-${c.login}">
+          <img class="pending-photo" src="${c.photo||''}" onerror="this.src=''" alt="">
+          <div class="pending-info">
+            <div class="pending-name">${c.displayName||c.login}</div>
+            <div class="pending-login">@${c.login}</div>
+            <div class="pending-campus">${c.campus||''}</div>
+            <div class="pending-time">${new Date(c.createdAt).toLocaleString('pt-PT')}</div>
+          </div>
+          <div class="pending-actions">
+            <button class="btn-approve" onclick="decide('${c.login}','approved')">✅ Validar</button>
+            <button class="btn-reject"  onclick="decide('${c.login}','rejected')">❌ Rejeitar</button>
+          </div>
+        </div>
+      `).join('');
+    }
+    const grid = document.getElementById('mural-grid');
+    if (approved.length === 0) {
+      grid.innerHTML = '<p class="empty-msg">Nenhuma cadete aprovada ainda.</p>';
+    } else {
+      grid.innerHTML = approved.map(c => `
+        <div class="mural-item">
+          <img src="${c.photo||''}" onerror="this.src=''" alt="${c.displayName}">
+          <span>${(c.firstName||c.login).split(' ')[0]}</span>
+        </div>
+      `).join('');
+    }
+    document.title = pending.length > 0 ? `(${pending.length}) Women42 — Admin 👑` : 'Women42 — Admin 👑';
+  } catch(e) { console.error(e); }
+}
+
+async function decide(targetLogin, action) {
+  const card = document.getElementById('card-' + targetLogin);
+  if (card) card.style.opacity = '0.4';
+  try {
+    await fetch('/.netlify/functions/approve', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ adminLogin, targetLogin, action })
+    });
+    await loadData();
+  } catch(e) { console.error(e); if (card) card.style.opacity = '1'; }
+}
+
+async function main() {
+  const param = new URLSearchParams(window.location.search).get('u');
+  if (!param) { window.location.href = '/'; return; }
+  history.replaceState(null, '', '/admin.html');
+
+  let user;
+  try { user = JSON.parse(decodeURIComponent(param)); } catch(e) { window.location.href = '/'; return; }
+
+  if (!user || user.login !== ADMIN_LOGIN) {
+    showScreen('screen-denied'); return;
+  }
+
+  adminLogin = user.login;
+  showScreen('screen-admin');
+  await loadData();
+  autoRefresh = setInterval(loadData, 10000);
+}
+
+main();
+</script>
+</body>
+</html>
