@@ -21,36 +21,33 @@ exports.handler = async (event) => {
     return { statusCode: 400, headers, body: JSON.stringify({ error: 'firstName e login obrigatorios' }) };
   }
 
-  if (!process.env.ANTHROPIC_KEY) {
-    return { statusCode: 500, headers, body: JSON.stringify({ error: 'ANTHROPIC_KEY nao configurada' }) };
+  if (!process.env.GEMINI_KEY) {
+    return { statusCode: 500, headers, body: JSON.stringify({ error: 'GEMINI_KEY nao configurada' }) };
   }
 
   try {
-    const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_KEY,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        messages: [{
-          role: 'user',
-          content: "Es um poeta carinhoso e amoroso.\nEscreve para " + firstName + ", uma cadete da escola 42, no Mes da Mulher.\n\nResponde APENAS neste formato:\nFRASE: [uma frase motivacional unica de 1-2 linhas com o nome " + firstName + "]\n---DIVISOR---\nPOEMA:\n[um poema de 4 estrofes de 4 versos, amoroso, que use o nome " + firstName + ", em portugues de Portugal]"
-        }]
-      })
-    });
+    const prompt = "Es um poeta carinhoso e amoroso.\nEscreve para " + firstName + ", uma cadete da escola de programacao 42, no Mes da Mulher.\n\nResponde APENAS neste formato:\nFRASE: [uma frase motivacional unica de 1-2 linhas com o nome " + firstName + "]\n---DIVISOR---\nPOEMA:\n[um poema de 4 estrofes de 4 versos, amoroso, que use o nome " + firstName + ", em portugues de Portugal]";
 
-    const claudeText = await claudeRes.text();
+    const geminiRes = await fetch(
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + process.env.GEMINI_KEY,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.9, maxOutputTokens: 1000 }
+        })
+      }
+    );
 
-    if (!claudeRes.ok) {
-      return { statusCode: 500, headers, body: JSON.stringify({ error: 'Claude: ' + claudeText }) };
+    const geminiText = await geminiRes.text();
+
+    if (!geminiRes.ok) {
+      return { statusCode: 500, headers, body: JSON.stringify({ error: 'Gemini: ' + geminiText }) };
     }
 
-    const claudeData = JSON.parse(claudeText);
-    const raw = claudeData.content[0].text;
+    const geminiData = JSON.parse(geminiText);
+    const raw = geminiData.candidates[0].content.parts[0].text;
     const parts = raw.split('---DIVISOR---');
 
     return {
