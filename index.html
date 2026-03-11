@@ -420,6 +420,9 @@ async function proceedToMural(user) {
 async function main() {
   const code = getCodeFromUrl();
   if (!code) { show('screen-login'); return; }
+  // DEBUG TEMPORÁRIO
+  const debugCode = getCodeFromUrl();
+  console.log('CODE:', debugCode);
   history.replaceState(null, '', window.location.pathname);
   setLoading('A verificar o teu perfil na 42...');
 
