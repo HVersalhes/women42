@@ -1,4 +1,4 @@
-const { getDeployStore } = require('@netlify/blobs');
+const { blobGet, blobList } = require('./blobs-helper');
 
 const ADMIN_LOGIN = 'hcosta';
 
@@ -17,12 +17,10 @@ exports.handler = async (event) => {
       return { statusCode: 403, headers, body: JSON.stringify({ error: 'Acesso negado' }) };
     }
 
-    const store = getDeployStore('cadetes');
-    const { blobs } = await store.list();
-
+    const blobs = await blobList();
     const cadetes = [];
     for (const blob of blobs) {
-      const data = await store.get(blob.key, { type: 'json' }).catch(() => null);
+      const data = await blobGet(blob.key);
       if (data) cadetes.push(data);
     }
 
