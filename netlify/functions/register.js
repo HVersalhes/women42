@@ -1,4 +1,4 @@
-const { getDeployStore } = require('@netlify/blobs');
+const { blobGet, blobSet } = require('./blobs-helper');
 
 exports.handler = async (event) => {
   const headers = {
@@ -11,18 +11,13 @@ exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405, headers, body: '{}' };
 
   try {
-    const store = getDeployStore('cadetes');
     const { login, firstName, displayName, photo, campus } = JSON.parse(event.body);
     if (!login) return { statusCode: 400, headers, body: JSON.stringify({ error: 'login em falta' }) };
 
-    // Verificar se já existe
-    const existing = await store.get(login, { type: 'json' }).catch(() => null);
-    if (existing) {
-      return { statusCode: 200, headers, body: JSON.stringify({ status: existing.status }) };
-    }
+    const existing = await blobGet(login);
+    if (existing) return { statusCode: 200, headers, body: JSON.stringify({ status: existing.status }) };
 
-    // Registar como pendente
-    await store.setJSON(login, {
+    await blobSet(login, {
       login, firstName, displayName, photo, campus,
       status: 'pending',
       createdAt: new Date().toISOString()
