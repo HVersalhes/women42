@@ -1,4 +1,4 @@
-const { getDeployStore } = require('@netlify/blobs');
+const { blobGet, blobSet } = require('./blobs-helper');
 
 const ADMIN_LOGIN = 'hcosta';
 
@@ -15,7 +15,6 @@ exports.handler = async (event) => {
   try {
     const { adminLogin, targetLogin, action } = JSON.parse(event.body);
 
-    // Verificar que é o admin
     if (adminLogin !== ADMIN_LOGIN) {
       return { statusCode: 403, headers, body: JSON.stringify({ error: 'Acesso negado' }) };
     }
@@ -23,11 +22,10 @@ exports.handler = async (event) => {
       return { statusCode: 400, headers, body: JSON.stringify({ error: 'Ação inválida' }) };
     }
 
-    const store = getDeployStore('cadetes');
-    const existing = await store.get(targetLogin, { type: 'json' }).catch(() => null);
+    const existing = await blobGet(targetLogin);
     if (!existing) return { statusCode: 404, headers, body: JSON.stringify({ error: 'Cadete não encontrada' }) };
 
-    await store.setJSON(targetLogin, { ...existing, status: action, updatedAt: new Date().toISOString() });
+    await blobSet(targetLogin, { ...existing, status: action, updatedAt: new Date().toISOString() });
 
     return { statusCode: 200, headers, body: JSON.stringify({ ok: true, status: action }) };
   } catch (err) {
