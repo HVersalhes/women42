@@ -1,1 +1,734 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Women42 — Mês da Mulher 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose:    #e8a0b0;
+    --rose-d:  #c2607a;
+    --gold:    #d4a843;
+    --gold-l:  #f0d080;
+    --cream:   #fdf6ee;
+    --petal:   #fce8ef;
+    --brown:   #5a3540;
+    --text:    #3a2030;
+    --muted:   #9a7080;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--text);
+    font-family: 'Cormorant Garamond', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Petals background ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(232,160,176,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 80%, rgba(212,168,67,0.10) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(252,232,239,0.5) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Floating petals ── */
+  .petals { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+  .petal {
+    position: absolute;
+    width: 12px; height: 16px;
+    background: radial-gradient(ellipse at 40% 40%, rgba(232,160,176,0.7), rgba(212,168,67,0.2));
+    border-radius: 50% 0 50% 0;
+    animation: fall linear infinite;
+    opacity: 0;
+  }
+  @keyframes fall {
+    0%   { transform: translateY(-20px) rotate(0deg); opacity:0; }
+    10%  { opacity: 0.7; }
+    90%  { opacity: 0.4; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity:0; }
+  }
+
+  /* ── Screens ── */
+  .screen {
+    display: none;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+  .screen.active { display: flex; }
+
+  /* ════════════════════════════
+     SCREEN 1 — Login
+  ════════════════════════════ */
+  #screen-login {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .login-card {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(212,168,67,0.25);
+    border-radius: 28px;
+    padding: 56px 48px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(194,96,122,0.12), 0 2px 8px rgba(212,168,67,0.08);
+    animation: riseIn 0.9s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  .crown {
+    font-size: 52px;
+    margin-bottom: 8px;
+    animation: float 3s ease-in-out infinite;
+    display: block;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+  }
+
+  .login-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--brown);
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+
+  .login-sub {
+    font-size: 1.05rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 36px;
+    line-height: 1.5;
+  }
+
+  .btn-login {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, var(--rose-d), var(--gold));
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 50px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 6px 24px rgba(194,96,122,0.3);
+    letter-spacing: 0.5px;
+  }
+  .btn-login:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(194,96,122,0.4); }
+
+  .login-footer {
+    margin-top: 24px;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  /* ════════════════════════════
+     SCREEN 2 — Bloqueado (homem)
+  ════════════════════════════ */
+  #screen-blocked {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .blocked-card {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(232,160,176,0.3);
+    border-radius: 28px;
+    padding: 56px 48px;
+    max-width: 440px;
+    width: 100%;
+    animation: riseIn 0.7s ease both;
+  }
+
+  .blocked-emoji { font-size: 56px; margin-bottom: 16px; display:block; }
+  .blocked-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--brown);
+    margin-bottom: 12px;
+  }
+  .blocked-text { color: var(--muted); font-size: 1.05rem; font-style: italic; line-height: 1.7; }
+
+  /* ════════════════════════════
+     SCREEN 3 — Loading
+  ════════════════════════════ */
+  #screen-loading {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    text-align: center;
+    padding: 40px;
+  }
+
+  .loading-ring {
+    width: 64px; height: 64px;
+    border: 3px solid rgba(212,168,67,0.2);
+    border-top-color: var(--gold);
+    border-right-color: var(--rose-d);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--brown);
+    font-style: italic;
+  }
+
+  /* ════════════════════════════
+     SCREEN 4 — Mural
+  ════════════════════════════ */
+  #screen-mural {
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 24px 80px;
+  }
+
+  /* Ornamental header */
+  .mural-header {
+    text-align: center;
+    margin-bottom: 48px;
+    animation: riseIn 0.8s ease both;
+  }
+
+  .ornament {
+    font-size: 1.4rem;
+    color: var(--gold);
+    letter-spacing: 8px;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .mural-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 700;
+    color: var(--brown);
+    font-style: italic;
+  }
+
+  .mural-date {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-top: 6px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Profile card */
+  .profile-card {
+    background: rgba(255,255,255,0.82);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(212,168,67,0.2);
+    border-radius: 28px;
+    padding: 40px;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 24px 64px rgba(194,96,122,0.1), 0 2px 8px rgba(212,168,67,0.08);
+    margin-bottom: 32px;
+    animation: riseIn 0.9s 0.1s ease both;
+    text-align: center;
+  }
+
+  .profile-photo-wrap {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+
+  .profile-photo {
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid white;
+    box-shadow: 0 0 0 3px var(--gold), 0 8px 32px rgba(194,96,122,0.25);
+  }
+
+  .profile-photo-ring {
+    position: absolute; inset: -8px;
+    border-radius: 50%;
+    border: 2px dashed rgba(212,168,67,0.4);
+    animation: spin 20s linear infinite;
+  }
+
+  .profile-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--brown);
+    margin-bottom: 4px;
+  }
+
+  .profile-login {
+    font-size: 0.9rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .profile-campus {
+    font-size: 0.85rem;
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  /* Divider */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0;
+    color: rgba(212,168,67,0.5);
+    font-size: 1rem;
+    letter-spacing: 4px;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(212,168,67,0.4), transparent);
+  }
+
+  /* Frase motivacional */
+  .frase-card {
+    background: linear-gradient(135deg, rgba(232,160,176,0.12), rgba(212,168,67,0.08));
+    border: 1px solid rgba(212,168,67,0.2);
+    border-radius: 20px;
+    padding: 28px 32px;
+    max-width: 600px;
+    width: 100%;
+    margin-bottom: 24px;
+    text-align: center;
+    animation: riseIn 0.9s 0.2s ease both;
+  }
+
+  .frase-label {
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .frase-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    font-style: italic;
+    color: var(--brown);
+    line-height: 1.6;
+  }
+
+  /* Poema */
+  .poema-card {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(232,160,176,0.25);
+    border-radius: 28px;
+    padding: 40px 44px;
+    max-width: 600px;
+    width: 100%;
+    margin-bottom: 32px;
+    animation: riseIn 0.9s 0.3s ease both;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .poema-card::before {
+    content: '"';
+    position: absolute;
+    top: -20px; left: 16px;
+    font-family: 'Playfair Display', serif;
+    font-size: 140px;
+    color: rgba(212,168,67,0.08);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .poema-label {
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--rose-d);
+    margin-bottom: 20px;
+    display: block;
+    text-align: center;
+  }
+
+  .poema-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    line-height: 2;
+    color: var(--text);
+    white-space: pre-line;
+    text-align: center;
+    font-style: italic;
+  }
+
+  .poema-assinatura {
+    text-align: right;
+    margin-top: 24px;
+    font-size: 0.85rem;
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  /* Footer */
+  .mural-footer {
+    text-align: center;
+    max-width: 600px;
+    animation: riseIn 0.9s 0.4s ease both;
+  }
+
+  .footer-hearts { font-size: 1.4rem; letter-spacing: 6px; margin-bottom: 8px; }
+  .footer-text { font-size: 0.85rem; color: var(--muted); font-style: italic; }
+
+  /* ── Animations ── */
+  @keyframes riseIn {
+    from { opacity:0; transform: translateY(24px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+
+  /* ── Responsive ── */
+  @media(max-width:480px) {
+    .login-card, .blocked-card { padding: 40px 28px; }
+    .poema-card { padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating petals -->
+<div class="petals" id="petals"></div>
+
+<!-- ═══ SCREEN 1: Login ═══ -->
+<div class="screen active" id="screen-login">
+  <div class="login-card">
+    <span class="crown">👑</span>
+    <h1 class="login-title">Women42</h1>
+    <p class="login-sub">Um presente especial para as nossas queridas cadetes,<br>no Mês da Mulher 🌸</p>
+    <a href="#" class="btn-login" id="btn-login-42">
+      <span>⚡</span> Entrar com a 42
+    </a>
+    <p class="login-footer">Apenas para cadetes femininas da École 42</p>
+  </div>
+</div>
+
+<!-- ═══ SCREEN 2: Bloqueado ═══ -->
+<div class="screen" id="screen-blocked">
+  <div class="blocked-card">
+    <span class="blocked-emoji">🌹</span>
+    <h2 class="blocked-title">Área Reservada</h2>
+    <p class="blocked-text">
+      Este espaço foi criado com todo o carinho<br>
+      exclusivamente para as nossas queridas colegas.<br><br>
+      <em>Obrigado por respeitares este momento especial delas.</em>
+    </p>
+  </div>
+</div>
+
+<!-- ═══ SCREEN 3: Loading ═══ -->
+<div class="screen" id="screen-loading">
+  <div class="loading-ring"></div>
+  <p class="loading-text" id="loading-msg">A preparar o teu mural especial...</p>
+</div>
+
+<!-- ═══ SCREEN 4: Mural ═══ -->
+<div class="screen" id="screen-mural">
+
+  <div class="mural-header">
+    <span class="ornament">❧ ✦ ❧</span>
+    <h1 class="mural-title">O teu mural especial</h1>
+    <p class="mural-date" id="mural-date"></p>
+  </div>
+
+  <!-- Profile -->
+  <div class="profile-card">
+    <div class="profile-photo-wrap">
+      <img class="profile-photo" id="profile-img" src="" alt="Foto de perfil">
+      <div class="profile-photo-ring"></div>
+    </div>
+    <h2 class="profile-name" id="profile-name"></h2>
+    <p class="profile-login" id="profile-login"></p>
+    <p class="profile-campus" id="profile-campus"></p>
+
+    <div class="divider">✦</div>
+
+    <p style="font-size:1rem; color:var(--muted); font-style:italic; line-height:1.7;">
+      Fizeste parte da história da 42.<br>
+      Cada linha de código que escreves é um acto de coragem.
+    </p>
+  </div>
+
+  <!-- Frase -->
+  <div class="frase-card">
+    <span class="frase-label">✦ Para ti ✦</span>
+    <p class="frase-text" id="frase-text"></p>
+  </div>
+
+  <!-- Poema -->
+  <div class="poema-card">
+    <span class="poema-label">🌸 Poema escrito só para ti 🌸</span>
+    <p class="poema-text" id="poema-text"></p>
+    <p class="poema-assinatura">— Os teus colegas da 42, com amor 💛</p>
+  </div>
+
+  <div class="mural-footer">
+    <p class="footer-hearts">🌸 💛 🌸</p>
+    <p class="footer-text">Este mural foi criado uma única vez, só para ti.<br>Guarda-o no coração e volta sempre que precisares de um abraço.</p>
+  </div>
+
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  CONFIGURAÇÃO — substitui os valores abaixo
+// ══════════════════════════════════════════════
+const CLIENT_ID    = "u-s4t2ud-47708765e1a89abb0e7363a395fc8284f0076fab800be29bd7f115657f2f69f0";
+const REDIRECT_URI = "https://hversalhes.github.io/women42";
+const ANTHROPIC_KEY = "COLA_AQUI_A_TUA_NOVA_API_KEY"; // sk-ant-...
+
+// ══════════════════════════════════════════════
+//  PETALS
+// ══════════════════════════════════════════════
+function spawnPetals() {
+  const container = document.getElementById('petals');
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.animationDuration = (8 + Math.random() * 12) + 's';
+    p.style.animationDelay = (Math.random() * 12) + 's';
+    p.style.width = (8 + Math.random() * 10) + 'px';
+    p.style.height = (10 + Math.random() * 14) + 'px';
+    p.style.opacity = (0.3 + Math.random() * 0.5).toString();
+    container.appendChild(p);
+  }
+}
+spawnPetals();
+
+// ══════════════════════════════════════════════
+//  SCREEN MANAGER
+// ══════════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function setLoading(msg) {
+  document.getElementById('loading-msg').textContent = msg;
+  showScreen('screen-loading');
+}
+
+// ══════════════════════════════════════════════
+//  OAUTH2 — IMPLICIT FLOW
+// ══════════════════════════════════════════════
+document.getElementById('btn-login-42').addEventListener('click', (e) => {
+  e.preventDefault();
+  const authUrl = `https://api.intra.42.fr/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=public`;
+  window.location.href = authUrl;
+});
+
+// ══════════════════════════════════════════════
+//  PARSE TOKEN FROM URL HASH
+// ══════════════════════════════════════════════
+function getTokenFromHash() {
+  const hash = window.location.hash.substring(1);
+  const params = new URLSearchParams(hash);
+  return params.get('access_token');
+}
+
+// ══════════════════════════════════════════════
+//  LOCAL STORAGE KEY (por utilizador)
+// ══════════════════════════════════════════════
+function muralKey(login) { return `women42_mural_${login}`; }
+
+// ══════════════════════════════════════════════
+//  FETCH USER FROM 42 API
+// ══════════════════════════════════════════════
+async function fetchUser(token) {
+  const res = await fetch('https://api.intra.42.fr/v2/me', {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  if (!res.ok) throw new Error('Erro ao obter perfil');
+  return res.json();
+}
+
+// ══════════════════════════════════════════════
+//  GENERATE CONTENT VIA CLAUDE API
+// ══════════════════════════════════════════════
+async function generateContent(firstName) {
+  const prompt = `Você é um poeta e escritor carinhoso, criativo e amoroso.
+Escreve para ${firstName}, uma cadete feminina da escola de programação 42.
+É o Dia Internacional da Mulher (8 de Março).
+
+Cria exatamente dois elementos, separados por ---DIVISOR---:
+
+1. Uma FRASE MOTIVACIONAL única (máximo 2 linhas), pessoal, calorosa, que use o nome ${firstName}, que celebre a sua coragem como mulher na tecnologia, que a faça sentir especial, necessária e amada pela comunidade.
+
+2. Um POEMA de 4 estrofes (cada estrofe com 4 versos), escrito especialmente para ${firstName}. O poema deve ser amoroso, criativo e carinhoso. Deve celebrá-la como mulher, como programadora corajosa, como princesa que merece ser cuidada. Deve transmitir que ela é especial, amada, necessária e bem-vinda. Usa o nome ${firstName} pelo menos uma vez no poema. Escreve em português de Portugal.
+
+Responde APENAS com:
+FRASE: [a frase aqui]
+---DIVISOR---
+POEMA:
+[o poema aqui]
+
+Sem mais texto, sem explicações.`;
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': ANTHROPIC_KEY,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+
+  if (!res.ok) throw new Error('Erro na API do Claude');
+  const data = await res.json();
+  const raw = data.content[0].text;
+
+  const parts = raw.split('---DIVISOR---');
+  let frase = '';
+  let poema = '';
+
+  if (parts.length >= 2) {
+    frase = parts[0].replace('FRASE:', '').trim();
+    poema = parts[1].replace('POEMA:', '').trim();
+  } else {
+    frase = raw.substring(0, 200);
+    poema = raw;
+  }
+
+  return { frase, poema };
+}
+
+// ══════════════════════════════════════════════
+//  RENDER MURAL
+// ══════════════════════════════════════════════
+function renderMural(data) {
+  document.getElementById('profile-img').src = data.photo;
+  document.getElementById('profile-name').textContent = data.displayName;
+  document.getElementById('profile-login').textContent = data.login;
+  document.getElementById('profile-campus').textContent = data.campus;
+  document.getElementById('frase-text').textContent = data.frase;
+  document.getElementById('poema-text').textContent = data.poema;
+
+  const d = new Date(data.createdAt);
+  document.getElementById('mural-date').textContent =
+    d.toLocaleDateString('pt-PT', { day: 'numeric', month: 'long', year: 'numeric' });
+
+  showScreen('screen-mural');
+}
+
+// ══════════════════════════════════════════════
+//  MAIN FLOW
+// ══════════════════════════════════════════════
+async function main() {
+  const token = getTokenFromHash();
+
+  if (!token) {
+    // Sem token — mostrar login
+    showScreen('screen-login');
+    return;
+  }
+
+  // Limpar hash da URL
+  history.replaceState(null, '', window.location.pathname);
+
+  setLoading('A verificar o teu perfil na 42...');
+
+  try {
+    const user = await fetchUser(token);
+
+    // Verificar género — campo 'gender' da API da 42
+    const gender = (user.gender || '').toLowerCase();
+    if (gender && gender !== 'female' && gender !== 'f') {
+      showScreen('screen-blocked');
+      return;
+    }
+
+    const login = user.login;
+    const key = muralKey(login);
+    const saved = localStorage.getItem(key);
+
+    if (saved) {
+      // Mural já existe — mostrar sem regenerar
+      const data = JSON.parse(saved);
+      renderMural(data);
+      return;
+    }
+
+    // Novo mural — gerar conteúdo
+    const firstName = user.first_name || login;
+    const displayName = `${user.first_name || ''} ${user.last_name || ''}`.trim() || login;
+    const photo = user.image?.versions?.medium || user.image?.link || '';
+    const campus = user.campus?.[0]?.name ? `📍 ${user.campus[0].name}` : '';
+
+    setLoading(`A criar o teu poema especial, ${firstName}...`);
+
+    const { frase, poema } = await generateContent(firstName);
+
+    const muralData = {
+      login,
+      displayName,
+      photo,
+      campus,
+      frase,
+      poema,
+      createdAt: new Date().toISOString()
+    };
+
+    // Guardar para sempre
+    localStorage.setItem(key, JSON.stringify(muralData));
+
+    renderMural(muralData);
+
+  } catch (err) {
+    console.error(err);
+    setLoading('Algo correu mal. Por favor tenta novamente.');
+    setTimeout(() => showScreen('screen-login'), 3000);
+  }
+}
+
+main();
+</script>
+</body>
+</html>
 
