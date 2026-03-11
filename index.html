@@ -3,293 +3,451 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Women42 — Admin 👑</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:wght@300;400&display=swap" rel="stylesheet">
+<title>Women42 — Mês da Mulher 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --rose-d: #c2607a; --gold: #d4a843; --cream: #fdf6ee;
-    --brown: #5a3540; --text: #3a2030; --muted: #9a7080;
-    --green: #4caf82; --red: #e05252;
+    --rose:   #e8a0b0;
+    --rose-d: #c2607a;
+    --gold:   #d4a843;
+    --cream:  #fdf6ee;
+    --brown:  #5a3540;
+    --text:   #3a2030;
+    --muted:  #9a7080;
   }
   *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--cream); color:var(--text); font-family:'Cormorant Garamond',serif; min-height:100vh; }
+  html { font-size: 16px; }
+  body {
+    background: var(--cream);
+    color: var(--text);
+    font-family: 'Cormorant Garamond', serif;
+    min-height: 100vh; min-height: 100dvh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content:''; position:fixed; inset:0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(232,160,176,.18) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 80%, rgba(212,168,67,.10) 0%, transparent 60%);
+    pointer-events:none; z-index:0;
+  }
+  .petals { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+  .petal {
+    position:absolute;
+    background: radial-gradient(ellipse at 40% 40%, rgba(232,160,176,.7), rgba(212,168,67,.2));
+    border-radius: 50% 0 50% 0;
+    animation: fall linear infinite; opacity:0;
+  }
+  @keyframes fall {
+    0%   { transform: translateY(-20px) rotate(0deg); opacity:0; }
+    10%  { opacity:.6; } 90% { opacity:.3; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity:0; }
+  }
+  .screen { display:none; min-height:100vh; min-height:100dvh; position:relative; z-index:1; }
+  .screen.active { display:flex; }
 
-  /* LOGIN ADMIN */
+  /* LOGIN */
   #screen-login {
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    min-height:100vh; padding:24px; text-align:center;
+    flex-direction:column; align-items:center; justify-content:center;
+    padding: clamp(24px,5vw,60px) clamp(16px,4vw,40px); text-align:center;
   }
-  .admin-login-card {
-    background:rgba(255,255,255,.9); border:1px solid rgba(212,168,67,.25);
-    border-radius:24px; padding:48px 40px; width:min(400px,100%);
-    box-shadow:0 20px 60px rgba(194,96,122,.12);
+  .login-card {
+    background: rgba(255,255,255,.82); backdrop-filter: blur(20px);
+    border: 1px solid rgba(212,168,67,.25); border-radius: clamp(20px,4vw,32px);
+    padding: clamp(32px,6vw,56px) clamp(24px,6vw,52px);
+    width: min(420px,100%);
+    box-shadow: 0 20px 60px rgba(194,96,122,.12);
+    animation: riseIn .9s cubic-bezier(.22,1,.36,1) both;
   }
-  .admin-login-card h1 { font-family:'Playfair Display',serif; font-size:2rem; color:var(--brown); margin-bottom:8px; }
-  .admin-login-card p { color:var(--muted); font-style:italic; margin-bottom:32px; }
-  .btn-42 {
-    display:inline-flex; align-items:center; gap:10px;
-    background:linear-gradient(135deg,var(--rose-d),var(--gold));
-    color:white; border:none; padding:14px 32px; border-radius:50px;
-    font-family:'Playfair Display',serif; font-size:1rem; font-weight:700;
-    cursor:pointer; width:100%; justify-content:center;
-    box-shadow:0 6px 24px rgba(194,96,122,.3); transition:.2s;
+  .crown { font-size:clamp(40px,8vw,56px); margin-bottom:8px; animation:float 3s ease-in-out infinite; display:block; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  .login-title { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,5vw,2.6rem); font-weight:700; color:var(--brown); line-height:1.1; margin-bottom:10px; }
+  .login-sub { font-size:clamp(.9rem,2.5vw,1.05rem); color:var(--muted); font-style:italic; margin-bottom:32px; line-height:1.6; }
+  .btn-login {
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    background: linear-gradient(135deg, var(--rose-d), var(--gold));
+    color:white; border:none; padding:clamp(12px,2.5vw,15px) clamp(24px,5vw,36px);
+    border-radius:50px; font-family:'Playfair Display',serif; font-size:clamp(.9rem,2.5vw,1rem);
+    font-weight:700; cursor:pointer; text-decoration:none;
+    transition: transform .2s, box-shadow .2s;
+    box-shadow: 0 6px 24px rgba(194,96,122,.3);
+    width:100%; max-width:280px; touch-action:manipulation;
   }
-  .btn-42:hover { transform:translateY(-2px); }
+  .btn-login:hover { transform:translateY(-2px); box-shadow:0 10px 32px rgba(194,96,122,.4); }
+  .login-footer { margin-top:20px; font-size:.8rem; color:var(--muted); }
+
+  /* BLOCKED */
+  #screen-blocked {
+    flex-direction:column; align-items:center; justify-content:center;
+    padding:clamp(24px,5vw,60px) clamp(16px,4vw,40px); text-align:center;
+  }
+  .blocked-card {
+    background:rgba(255,255,255,.82); backdrop-filter:blur(20px);
+    border:1px solid rgba(232,160,176,.3); border-radius:clamp(20px,4vw,32px);
+    padding:clamp(32px,6vw,56px) clamp(24px,6vw,52px);
+    width:min(440px,100%); animation:riseIn .7s ease both;
+  }
+  .blocked-emoji { font-size:clamp(40px,8vw,56px); margin-bottom:16px; display:block; }
+  .blocked-title { font-family:'Playfair Display',serif; font-size:clamp(1.5rem,4vw,2rem); color:var(--brown); margin-bottom:12px; }
+  .blocked-text { color:var(--muted); font-size:clamp(.9rem,2.5vw,1.05rem); font-style:italic; line-height:1.8; }
 
   /* LOADING */
-  #screen-loading { display:none; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; gap:20px; }
-  .ring { width:56px; height:56px; border:3px solid rgba(212,168,67,.2); border-top-color:var(--gold); border-right-color:var(--rose-d); border-radius:50%; animation:spin 1s linear infinite; }
+  #screen-loading {
+    flex-direction:column; align-items:center; justify-content:center;
+    gap:24px; text-align:center; padding:40px;
+  }
+  .loading-ring {
+    width:clamp(48px,10vw,64px); height:clamp(48px,10vw,64px);
+    border:3px solid rgba(212,168,67,.2);
+    border-top-color:var(--gold); border-right-color:var(--rose-d);
+    border-radius:50%; animation:spin 1s linear infinite;
+  }
   @keyframes spin { to{transform:rotate(360deg)} }
-  .loading-txt { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--brown); font-style:italic; }
+  .loading-text { font-family:'Playfair Display',serif; font-size:clamp(1rem,3vw,1.2rem); color:var(--brown); font-style:italic; max-width:280px; }
 
-  /* DENIED */
-  #screen-denied { display:none; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; text-align:center; padding:24px; }
-  #screen-denied h2 { font-family:'Playfair Display',serif; font-size:2rem; color:var(--red); margin-bottom:12px; }
-  #screen-denied p { color:var(--muted); font-size:1.1rem; }
-
-  /* ADMIN PANEL */
-  #screen-admin { display:none; flex-direction:column; min-height:100vh; }
-  .admin-header {
-    background:linear-gradient(135deg,var(--rose-d),var(--gold));
-    color:white; padding:clamp(16px,3vw,24px) clamp(16px,4vw,32px);
-    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
-    position:sticky; top:0; z-index:100;
-    box-shadow:0 4px 20px rgba(194,96,122,.3);
+  /* WAITING */
+  #screen-waiting {
+    flex-direction:column; align-items:center; justify-content:center;
+    padding:clamp(24px,5vw,60px) clamp(16px,4vw,40px); text-align:center; gap:24px;
   }
-  .admin-header h1 { font-family:'Playfair Display',serif; font-size:clamp(1.2rem,3vw,1.6rem); }
-  .admin-stats { display:flex; gap:16px; flex-wrap:wrap; }
-  .stat { background:rgba(255,255,255,.2); border-radius:12px; padding:6px 16px; font-size:.85rem; text-align:center; }
-  .stat strong { display:block; font-size:1.3rem; font-family:'Playfair Display',serif; }
-
-  .admin-body { padding:clamp(16px,4vw,32px); display:flex; flex-direction:column; gap:32px; max-width:1200px; margin:0 auto; width:100%; }
-
-  /* NOTIFICAÇÕES / PENDENTES */
-  .section-title {
-    font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--brown);
-    margin-bottom:16px; display:flex; align-items:center; gap:10px;
+  .waiting-card {
+    background:rgba(255,255,255,.82); backdrop-filter:blur(20px);
+    border:1px solid rgba(212,168,67,.25); border-radius:clamp(20px,4vw,32px);
+    padding:clamp(32px,6vw,52px) clamp(24px,6vw,48px);
+    width:min(460px,100%); animation:riseIn .8s ease both;
+    display:flex; flex-direction:column; align-items:center; gap:20px;
   }
-  .badge { background:var(--rose-d); color:white; border-radius:50px; padding:2px 10px; font-size:.8rem; font-family:'Cormorant Garamond',serif; }
-  .empty-msg { color:var(--muted); font-style:italic; font-size:1rem; padding:20px 0; }
-
-  .pending-list { display:flex; flex-direction:column; gap:12px; }
-  .pending-card {
-    background:white; border:1px solid rgba(212,168,67,.2); border-radius:16px;
-    padding:16px 20px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;
-    box-shadow:0 4px 16px rgba(194,96,122,.06);
-    animation:slideIn .4s ease both;
-  }
-  @keyframes slideIn { from{opacity:0;transform:translateX(-16px)} to{opacity:1;transform:translateX(0)} }
-  .pending-photo { width:52px; height:52px; border-radius:50%; object-fit:cover; border:2px solid var(--gold); flex-shrink:0; }
-  .pending-info { flex:1; min-width:0; }
-  .pending-name { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--brown); }
-  .pending-login { font-size:.8rem; color:var(--muted); letter-spacing:1px; }
-  .pending-campus { font-size:.8rem; color:var(--gold); font-style:italic; }
-  .pending-time { font-size:.75rem; color:var(--muted); }
-  .pending-actions { display:flex; gap:8px; flex-shrink:0; }
-  .btn-approve {
-    background:var(--green); color:white; border:none; border-radius:50px;
-    padding:8px 20px; font-family:'Playfair Display',serif; font-size:.9rem;
-    cursor:pointer; transition:.2s; white-space:nowrap;
-  }
-  .btn-approve:hover { opacity:.85; transform:scale(1.04); }
-  .btn-reject {
-    background:var(--red); color:white; border:none; border-radius:50px;
-    padding:8px 20px; font-family:'Playfair Display',serif; font-size:.9rem;
-    cursor:pointer; transition:.2s; white-space:nowrap;
-  }
-  .btn-reject:hover { opacity:.85; transform:scale(1.04); }
-
-  /* MURAL COLETIVO */
-  .mural-grid {
-    display:grid;
-    grid-template-columns: repeat(auto-fill, minmax(clamp(80px,15vw,110px), 1fr));
-    gap:clamp(12px,2vw,20px);
-  }
-  .mural-item {
-    display:flex; flex-direction:column; align-items:center; gap:8px;
-    animation:riseIn .5s ease both;
-  }
-  @keyframes riseIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-  .mural-item img {
-    width:clamp(64px,12vw,90px); height:clamp(64px,12vw,90px);
+  .waiting-photo {
+    width:clamp(72px,15vw,96px); height:clamp(72px,15vw,96px);
     border-radius:50%; object-fit:cover;
-    border:3px solid white; box-shadow:0 0 0 2px var(--gold);
-    transition:.2s;
+    border:3px solid white; box-shadow:0 0 0 3px var(--gold);
   }
-  .mural-item img:hover { transform:scale(1.08); box-shadow:0 0 0 3px var(--rose-d); }
-  .mural-item span { font-size:clamp(.65rem,1.5vw,.8rem); color:var(--brown); text-align:center; font-family:'Playfair Display',serif; }
+  .waiting-name { font-family:'Playfair Display',serif; font-size:clamp(1.3rem,3.5vw,1.7rem); font-weight:700; color:var(--brown); }
+  .waiting-emoji { font-size:clamp(32px,7vw,48px); animation:float 2.5s ease-in-out infinite; }
+  .waiting-title { font-family:'Playfair Display',serif; font-size:clamp(1.1rem,3vw,1.4rem); color:var(--brown); font-style:italic; }
+  .waiting-sub { font-size:clamp(.85rem,2.2vw,1rem); color:var(--muted); line-height:1.7; }
+  .waiting-dots { display:flex; gap:8px; justify-content:center; margin-top:4px; }
+  .waiting-dots span {
+    width:8px; height:8px; border-radius:50%; background:var(--rose-d);
+    animation:pulse 1.4s ease-in-out infinite;
+  }
+  .waiting-dots span:nth-child(2) { animation-delay:.2s; }
+  .waiting-dots span:nth-child(3) { animation-delay:.4s; }
+  @keyframes pulse { 0%,80%,100%{transform:scale(0);opacity:.5} 40%{transform:scale(1);opacity:1} }
+  .btn-sair {
+    background:transparent; border:1px solid rgba(194,96,122,.3);
+    color:var(--muted); padding:10px 24px; border-radius:50px;
+    font-family:'Cormorant Garamond',serif; font-size:.9rem;
+    cursor:pointer; transition:.2s; touch-action:manipulation;
+  }
+  .btn-sair:hover { border-color:var(--rose-d); color:var(--rose-d); }
 
-  .refresh-btn {
-    background:transparent; border:1px solid rgba(212,168,67,.4); color:var(--muted);
-    padding:8px 20px; border-radius:50px; font-family:'Cormorant Garamond',serif;
-    font-size:.9rem; cursor:pointer; transition:.2s; align-self:flex-start;
+  /* MURAL */
+  #screen-mural {
+    flex-direction:column; align-items:center;
+    padding:clamp(40px,8vw,70px) clamp(16px,4vw,24px) clamp(60px,10vw,100px);
+    gap:clamp(20px,4vw,32px);
   }
-  .refresh-btn:hover { border-color:var(--gold); color:var(--gold); }
+  .mural-header { text-align:center; animation:riseIn .8s ease both; width:100%; }
+  .ornament { font-size:clamp(1rem,3vw,1.4rem); color:var(--gold); letter-spacing:clamp(4px,1.5vw,10px); display:block; margin-bottom:8px; }
+  .mural-title { font-family:'Playfair Display',serif; font-size:clamp(1.5rem,4vw,2.4rem); font-weight:700; color:var(--brown); font-style:italic; }
+  .mural-date { color:var(--muted); font-size:clamp(.75rem,2vw,.9rem); margin-top:6px; letter-spacing:2px; text-transform:uppercase; }
+  .card {
+    background:rgba(255,255,255,.82); backdrop-filter:blur(24px);
+    border:1px solid rgba(212,168,67,.2); border-radius:clamp(16px,4vw,28px);
+    width:min(620px,100%); box-shadow:0 16px 48px rgba(194,96,122,.08);
+  }
+  .profile-card { padding:clamp(24px,5vw,44px); text-align:center; animation:riseIn .9s .1s ease both; }
+  .profile-photo-wrap { position:relative; display:inline-block; margin-bottom:20px; }
+  .profile-photo {
+    width:clamp(90px,20vw,120px); height:clamp(90px,20vw,120px);
+    border-radius:50%; object-fit:cover; border:4px solid white;
+    box-shadow:0 0 0 3px var(--gold), 0 8px 32px rgba(194,96,122,.25); display:block;
+  }
+  .profile-photo-ring { position:absolute; inset:-8px; border-radius:50%; border:2px dashed rgba(212,168,67,.4); animation:spin 20s linear infinite; }
+  .profile-name { font-family:'Playfair Display',serif; font-size:clamp(1.5rem,4vw,2rem); font-weight:700; color:var(--brown); margin-bottom:4px; word-break:break-word; }
+  .profile-login { font-size:clamp(.75rem,2vw,.9rem); color:var(--muted); letter-spacing:2px; text-transform:uppercase; margin-bottom:6px; }
+  .profile-campus { font-size:clamp(.8rem,2vw,.9rem); color:var(--gold); font-style:italic; }
+  .divider { display:flex; align-items:center; gap:12px; margin:clamp(16px,4vw,28px) 0; color:rgba(212,168,67,.5); font-size:1rem; letter-spacing:4px; }
+  .divider::before,.divider::after { content:''; flex:1; height:1px; background:linear-gradient(to right,transparent,rgba(212,168,67,.4),transparent); }
+  .profile-motto { font-size:clamp(.9rem,2.5vw,1rem); color:var(--muted); font-style:italic; line-height:1.8; }
+  .frase-card {
+    background:linear-gradient(135deg,rgba(232,160,176,.12),rgba(212,168,67,.08));
+    border:1px solid rgba(212,168,67,.2); border-radius:clamp(16px,4vw,24px);
+    padding:clamp(20px,4vw,32px) clamp(20px,5vw,36px);
+    width:min(620px,100%); text-align:center; animation:riseIn .9s .2s ease both;
+  }
+  .frase-label { font-size:clamp(.65rem,1.5vw,.75rem); letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:12px; display:block; }
+  .frase-text { font-family:'Playfair Display',serif; font-size:clamp(1rem,3vw,1.35rem); font-style:italic; color:var(--brown); line-height:1.7; }
+  .poema-card { padding:clamp(24px,5vw,44px) clamp(20px,5vw,48px); animation:riseIn .9s .3s ease both; position:relative; overflow:hidden; }
+  .poema-card::before { content:'"'; position:absolute; top:-20px; left:12px; font-family:'Playfair Display',serif; font-size:clamp(80px,18vw,140px); color:rgba(212,168,67,.07); line-height:1; pointer-events:none; }
+  .poema-label { font-size:clamp(.65rem,1.5vw,.75rem); letter-spacing:3px; text-transform:uppercase; color:var(--rose-d); margin-bottom:clamp(14px,3vw,22px); display:block; text-align:center; }
+  .poema-text { font-family:'Cormorant Garamond',serif; font-size:clamp(.95rem,2.5vw,1.08rem); line-height:clamp(1.8,.3 + 4vw,2.1); color:var(--text); white-space:pre-line; text-align:center; font-style:italic; }
+  .poema-assinatura { text-align:right; margin-top:clamp(16px,3vw,24px); font-size:clamp(.75rem,2vw,.88rem); color:var(--gold); font-style:italic; }
+  .mural-footer { text-align:center; width:min(620px,100%); animation:riseIn .9s .4s ease both; }
+  .footer-hearts { font-size:clamp(1rem,3vw,1.4rem); letter-spacing:6px; margin-bottom:8px; }
+  .footer-text { font-size:clamp(.78rem,2vw,.88rem); color:var(--muted); font-style:italic; line-height:1.7; }
+  .btn-sair-mural {
+    margin-top:8px; background:transparent; border:1px solid rgba(194,96,122,.3);
+    color:var(--muted); padding:10px 28px; border-radius:50px;
+    font-family:'Cormorant Garamond',serif; font-size:.9rem;
+    cursor:pointer; transition:.2s; touch-action:manipulation;
+  }
+  .btn-sair-mural:hover { border-color:var(--rose-d); color:var(--rose-d); }
+
+  @keyframes riseIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  @media(min-width:600px){ .btn-login{ width:auto; } }
+  @media(max-width:360px){ .poema-card::before{ display:none; } }
 </style>
 </head>
 <body>
+<div class="petals" id="petals"></div>
 
 <!-- LOGIN -->
-<div id="screen-login">
-  <div class="admin-login-card">
-    <h1>👑 Admin</h1>
-    <p>Acesso restrito ao administrador da Women42</p>
-    <button class="btn-42" id="btn-login">⚡ Entrar com a 42</button>
+<div class="screen active" id="screen-login">
+  <div class="login-card">
+    <span class="crown">👑</span>
+    <h1 class="login-title">Women42</h1>
+    <p class="login-sub">Um presente especial para as nossas queridas cadetes,<br>no Mês da Mulher 🌸</p>
+    <a href="#" class="btn-login" id="btn-login-42"><span>⚡</span> Entrar com a 42</a>
+    <p class="login-footer">Apenas para cadetes femininas da École 42</p>
+  </div>
+</div>
+
+<!-- BLOCKED -->
+<div class="screen" id="screen-blocked">
+  <div class="blocked-card">
+    <span class="blocked-emoji">🌹</span>
+    <h2 class="blocked-title">Olá, Cadete!</h2>
+    <p class="blocked-text">
+      Esta app é reservada exclusivamente<br>
+      às nossas queridas <strong>Cadetes femininas</strong>.<br><br>
+      Foi criada com muito amor para celebrar<br>
+      as mulheres incríveis da nossa comunidade 42.<br><br>
+      <em>Obrigado por respeitares este momento especial delas. 💛</em>
+    </p>
   </div>
 </div>
 
 <!-- LOADING -->
-<div id="screen-loading" style="display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:20px;">
-  <div class="ring"></div>
-  <p class="loading-txt" id="loading-txt">A verificar identidade...</p>
+<div class="screen" id="screen-loading">
+  <div class="loading-ring"></div>
+  <p class="loading-text" id="loading-msg">A preparar o teu mural especial...</p>
 </div>
 
-<!-- DENIED -->
-<div id="screen-denied" style="display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:24px;">
-  <h2>🚫 Acesso Negado</h2>
-  <p>Este painel é exclusivo para o administrador.</p>
-</div>
-
-<!-- ADMIN PANEL -->
-<div id="screen-admin" style="display:none;flex-direction:column;min-height:100vh;">
-  <div class="admin-header">
-    <h1>👑 Women42 — Admin</h1>
-    <div class="admin-stats">
-      <div class="stat"><strong id="count-pending">0</strong>Pendentes</div>
-      <div class="stat"><strong id="count-approved">0</strong>Aprovadas</div>
-      <div class="stat"><strong id="count-total">0</strong>Total</div>
-    </div>
+<!-- WAITING -->
+<div class="screen" id="screen-waiting">
+  <div class="waiting-card">
+    <span class="waiting-emoji">🌸</span>
+    <img class="waiting-photo" id="waiting-photo" src="" alt="">
+    <p class="waiting-name" id="waiting-name"></p>
+    <h2 class="waiting-title">O teu perfil está a ser verificado</h2>
+    <p class="waiting-sub">
+      Aguarda um momento enquanto confirmamos<br>
+      o teu acesso. Serás notificada assim que<br>
+      o teu mural estiver pronto. 💛
+    </p>
+    <div class="waiting-dots"><span></span><span></span><span></span></div>
+    <button class="btn-sair" id="btn-sair-waiting">Sair</button>
   </div>
-  <div class="admin-body">
+</div>
 
-    <div>
-      <div class="section-title">
-        🔔 Pendentes de aprovação
-        <span class="badge" id="pending-badge">0</span>
-      </div>
-      <div class="pending-list" id="pending-list">
-        <p class="empty-msg">Nenhuma cadete pendente. 🌸</p>
-      </div>
+<!-- MURAL -->
+<div class="screen" id="screen-mural">
+  <div class="mural-header">
+    <span class="ornament">❧ ✦ ❧</span>
+    <h1 class="mural-title">O teu mural especial</h1>
+    <p class="mural-date" id="mural-date"></p>
+  </div>
+  <div class="card profile-card">
+    <div class="profile-photo-wrap">
+      <img class="profile-photo" id="profile-img" src="" alt="Foto de perfil">
+      <div class="profile-photo-ring"></div>
     </div>
-
-    <div>
-      <div class="section-title">🌸 Cadetes aprovadas</div>
-      <div class="mural-grid" id="mural-grid">
-        <p class="empty-msg">Nenhuma cadete aprovada ainda.</p>
-      </div>
-    </div>
-
-    <button class="refresh-btn" id="btn-refresh">↻ Atualizar</button>
+    <h2 class="profile-name" id="profile-name"></h2>
+    <p class="profile-login" id="profile-login"></p>
+    <p class="profile-campus" id="profile-campus"></p>
+    <div class="divider">✦</div>
+    <p class="profile-motto">Fizeste parte da história da 42.<br>Cada linha de código que escreves é um acto de coragem.</p>
+  </div>
+  <div class="frase-card">
+    <span class="frase-label">✦ Para ti ✦</span>
+    <p class="frase-text" id="frase-text"></p>
+  </div>
+  <div class="card poema-card">
+    <span class="poema-label">🌸 Poema escrito só para ti 🌸</span>
+    <p class="poema-text" id="poema-text"></p>
+    <p class="poema-assinatura">— Os teus colegas da 42, com amor 💛</p>
+  </div>
+  <div class="mural-footer">
+    <p class="footer-hearts">🌸 💛 🌸</p>
+    <p class="footer-text">Este mural foi criado uma única vez, só para ti.<br>Volta sempre que precisares de um abraço. 🌸</p>
+    <button class="btn-sair-mural" id="btn-sair-mural">← Voltar ao início</button>
   </div>
 </div>
 
 <script>
 const CLIENT_ID = "u-s4t2ud-47708765e1a89abb0e7363a395fc8284f0076fab800be29bd7f115657f2f69f0";
-const ADMIN_LOGIN = "hcosta";
-let adminLogin = null;
-let autoRefresh = null;
+let pollingInterval = null;
+let currentUser = null;
 
-function showScreen(id) {
-  ['screen-login','screen-loading','screen-denied','screen-admin'].forEach(s => {
-    document.getElementById(s).style.display = 'none';
-  });
-  document.getElementById(id).style.display = 'flex';
-  document.getElementById(id).style.flexDirection = 'column';
+// PETALS
+(function() {
+  const c = document.getElementById('petals');
+  const n = window.innerWidth < 480 ? 10 : 20;
+  for (let i = 0; i < n; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.style.cssText = `left:${Math.random()*100}vw;width:${8+Math.random()*10}px;height:${10+Math.random()*14}px;animation-duration:${8+Math.random()*12}s;animation-delay:${Math.random()*14}s;`;
+    c.appendChild(p);
+  }
+})();
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+function setLoading(msg) {
+  document.getElementById('loading-msg').textContent = msg;
+  show('screen-loading');
+}
+function stopPolling() {
+  if (pollingInterval) { clearInterval(pollingInterval); pollingInterval = null; }
+}
+function logout() {
+  stopPolling();
+  currentUser = null;
+  show('screen-login');
 }
 
-document.getElementById('btn-login').addEventListener('click', () => {
-  const redirect = encodeURIComponent('https://42woman.netlify.app/admin.html');
+// LOGIN
+document.getElementById('btn-login-42').addEventListener('click', e => {
+  e.preventDefault();
+  const redirect = encodeURIComponent('https://42woman.netlify.app');
   window.location.href =
     `https://api.intra.42.fr/oauth/authorize?client_id=${CLIENT_ID}` +
     `&redirect_uri=${redirect}&response_type=code&scope=public`;
 });
 
-document.getElementById('btn-refresh').addEventListener('click', loadData);
+document.getElementById('btn-sair-waiting').addEventListener('click', logout);
+document.getElementById('btn-sair-mural').addEventListener('click', logout);
 
-async function loadData() {
-  try {
-    const res = await fetch(`/.netlify/functions/admin-data?admin=${adminLogin}`);
-    const { cadetes } = await res.json();
-
-    const pending  = cadetes.filter(c => c.status === 'pending');
-    const approved = cadetes.filter(c => c.status === 'approved');
-
-    document.getElementById('count-pending').textContent  = pending.length;
-    document.getElementById('count-approved').textContent = approved.length;
-    document.getElementById('count-total').textContent    = cadetes.length;
-    document.getElementById('pending-badge').textContent  = pending.length;
-
-    // Pendentes
-    const pendingList = document.getElementById('pending-list');
-    if (pending.length === 0) {
-      pendingList.innerHTML = '<p class="empty-msg">Nenhuma cadete pendente. 🌸</p>';
-    } else {
-      pendingList.innerHTML = pending.map(c => `
-        <div class="pending-card" id="card-${c.login}">
-          <img class="pending-photo" src="${c.photo||''}" onerror="this.src=''" alt="">
-          <div class="pending-info">
-            <div class="pending-name">${c.displayName||c.login}</div>
-            <div class="pending-login">@${c.login}</div>
-            <div class="pending-campus">${c.campus||''}</div>
-            <div class="pending-time">${new Date(c.createdAt).toLocaleString('pt-PT')}</div>
-          </div>
-          <div class="pending-actions">
-            <button class="btn-approve" onclick="decide('${c.login}','approved')">✅ Validar</button>
-            <button class="btn-reject"  onclick="decide('${c.login}','rejected')">❌ Rejeitar</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // Mural aprovadas
-    const grid = document.getElementById('mural-grid');
-    if (approved.length === 0) {
-      grid.innerHTML = '<p class="empty-msg">Nenhuma cadete aprovada ainda.</p>';
-    } else {
-      grid.innerHTML = approved.map(c => `
-        <div class="mural-item">
-          <img src="${c.photo||''}" onerror="this.src=''" alt="${c.displayName}">
-          <span>${(c.firstName||c.login).split(' ')[0]}</span>
-        </div>
-      `).join('');
-    }
-
-    // Notificação título
-    document.title = pending.length > 0
-      ? `(${pending.length}) Women42 — Admin 👑`
-      : 'Women42 — Admin 👑';
-
-  } catch(e) { console.error(e); }
+function getCodeFromUrl() {
+  return new URLSearchParams(window.location.search).get('code');
 }
 
-async function decide(targetLogin, action) {
-  const card = document.getElementById('card-' + targetLogin);
-  if (card) card.style.opacity = '0.4';
-  try {
-    await fetch('/.netlify/functions/approve', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ adminLogin, targetLogin, action })
-    });
-    await loadData();
-  } catch(e) { console.error(e); if (card) card.style.opacity = '1'; }
+async function exchangeCode(code) {
+  const res = await fetch('/.netlify/functions/token', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ code })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error('Erro ao obter perfil');
+  return data.user;
+}
+
+async function registerUser(user) {
+  const res = await fetch('/.netlify/functions/register', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      login: user.login,
+      firstName: user.first_name || user.login,
+      displayName: `${user.first_name||''} ${user.last_name||''}`.trim() || user.login,
+      photo: user.image?.versions?.medium || user.image?.link || '',
+      campus: user.campus?.[0]?.name ? '📍 ' + user.campus[0].name : ''
+    })
+  });
+  const data = await res.json();
+  return data.status;
+}
+
+async function checkStatus(login) {
+  const res = await fetch(`/.netlify/functions/status?login=${login}`);
+  const data = await res.json();
+  return data.status;
+}
+
+async function fetchOrCreateContent(login, firstName) {
+  const res = await fetch('/.netlify/functions/mural', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ login, firstName })
+  });
+  if (!res.ok) throw new Error('Erro ao gerar conteúdo');
+  return (await res.json()).content;
+}
+
+function showWaiting(user) {
+  document.getElementById('waiting-photo').src = user.image?.versions?.medium || user.image?.link || '';
+  document.getElementById('waiting-name').textContent = user.first_name || user.login;
+  show('screen-waiting');
+
+  // Polling a cada 5 segundos
+  pollingInterval = setInterval(async () => {
+    try {
+      const status = await checkStatus(user.login);
+      if (status === 'approved') {
+        stopPolling();
+        await proceedToMural(user);
+      } else if (status === 'rejected') {
+        stopPolling();
+        show('screen-blocked');
+      }
+    } catch(e) { /* continua */ }
+  }, 5000);
+}
+
+async function proceedToMural(user) {
+  const firstName = user.first_name || user.login;
+  const displayName = `${user.first_name||''} ${user.last_name||''}`.trim() || user.login;
+  const photo = user.image?.versions?.medium || user.image?.link || '';
+  const campus = user.campus?.[0]?.name ? '📍 ' + user.campus[0].name : '';
+
+  setLoading(`A criar o teu poema especial, ${firstName}... 🌸`);
+  const content = await fetchOrCreateContent(user.login, firstName);
+
+  document.getElementById('profile-img').src = photo;
+  document.getElementById('profile-name').textContent = displayName;
+  document.getElementById('profile-login').textContent = '@' + user.login;
+  document.getElementById('profile-campus').textContent = campus;
+  document.getElementById('frase-text').textContent = content.frase;
+  document.getElementById('poema-text').textContent = content.poema;
+  document.getElementById('mural-date').textContent =
+    new Date().toLocaleDateString('pt-PT', { day:'numeric', month:'long', year:'numeric' });
+  show('screen-mural');
 }
 
 async function main() {
-  // Ler utilizador passado pelo index.html via sessionStorage
-  const stored = sessionStorage.getItem('adminUser');
-  if (!stored) { showScreen('screen-login'); return; }
+  const code = getCodeFromUrl();
+  if (!code) { show('screen-login'); return; }
+  history.replaceState(null, '', window.location.pathname);
+  setLoading('A verificar o teu perfil na 42...');
 
-  let user;
-  try { user = JSON.parse(stored); } catch(e) { showScreen('screen-login'); return; }
+  try {
+    const user = await exchangeCode(code);
+    currentUser = user;
 
-  if (!user || user.login !== ADMIN_LOGIN) {
-    showScreen('screen-denied'); return;
+    // Admin: redirecionar para painel
+    if (user.login === 'hcosta') {
+      const u = encodeURIComponent(JSON.stringify({login:user.login,first_name:user.first_name,image:user.image}));
+      window.location.href = '/admin.html?u=' + u;
+      return;
+    }
+
+    const status = await registerUser(user);
+
+    if (status === 'approved') {
+      await proceedToMural(user);
+    } else if (status === 'rejected') {
+      show('screen-blocked');
+    } else {
+      showWaiting(user);
+    }
+  } catch (err) {
+    console.error(err);
+    setLoading('Algo correu mal. A redirecionar...');
+    setTimeout(() => show('screen-login'), 3000);
   }
-
-  adminLogin = user.login;
-  showScreen('screen-admin');
-  await loadData();
-  autoRefresh = setInterval(loadData, 10000);
 }
 
 main();
