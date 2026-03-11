@@ -129,14 +129,8 @@
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="screen-login">
-  <div class="admin-login-card">
-    <h1>👑 Admin</h1>
-    <p>Acesso restrito ao administrador da Women42</p>
-    <button class="btn-42" id="btn-login">⚡ Entrar com a 42</button>
-  </div>
-</div>
+<!-- SEM ACESSO DIRETO - redireciona para index -->
+<div id="screen-login" style="display:none;"></div>
 
 <!-- LOADING -->
 <div id="screen-loading" style="display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:20px;">
@@ -275,35 +269,21 @@ async function decide(targetLogin, action) {
 }
 
 async function main() {
-  const code = new URLSearchParams(window.location.search).get('code');
-
-  if (!code) { showScreen('screen-login'); return; }
-
+  const param = new URLSearchParams(window.location.search).get('u');
+  if (!param) { window.location.href = '/'; return; }
   history.replaceState(null, '', '/admin.html');
-  showScreen('screen-loading');
 
-  try {
-    const res = await fetch('/.netlify/functions/token', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code, redirectUri: 'https://42woman.netlify.app/admin.html' })
-    });
-    const data = await res.json();
-    const user = data.user;
+  let user;
+  try { user = JSON.parse(decodeURIComponent(param)); } catch(e) { window.location.href = '/'; return; }
 
-    if (!user || user.login !== ADMIN_LOGIN) {
-      showScreen('screen-denied'); return;
-    }
-
-    adminLogin = user.login;
-    showScreen('screen-admin');
-    await loadData();
-
-    // Auto-refresh a cada 10 segundos
-    autoRefresh = setInterval(loadData, 10000);
-
-  } catch(e) {
-    document.getElementById('loading-txt').textContent = 'Erro ao autenticar.';
+  if (!user || user.login !== ADMIN_LOGIN) {
+    showScreen('screen-denied'); return;
   }
+
+  adminLogin = user.login;
+  showScreen('screen-admin');
+  await loadData();
+  autoRefresh = setInterval(loadData, 10000);
 }
 
 main();
