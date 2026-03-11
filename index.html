@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -11,30 +10,34 @@
     --rose:   #e8a0b0;
     --rose-d: #c2607a;
     --gold:   #d4a843;
-    --gold-l: #f0d080;
     --cream:  #fdf6ee;
-    --petal:  #fce8ef;
     --brown:  #5a3540;
     --text:   #3a2030;
     --muted:  #9a7080;
   }
-  * { margin:0; padding:0; box-sizing:border-box; }
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  html { font-size: 16px; }
+
   body {
     background: var(--cream);
     color: var(--text);
     font-family: 'Cormorant Garamond', serif;
     min-height: 100vh;
+    min-height: 100dvh;
     overflow-x: hidden;
   }
+
   body::before {
     content:'';
     position:fixed; inset:0;
     background:
       radial-gradient(ellipse 80% 60% at 20% 10%, rgba(232,160,176,.18) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 80% at 80% 80%, rgba(212,168,67,.10) 0%, transparent 60%),
-      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(252,232,239,.5) 0%, transparent 70%);
+      radial-gradient(ellipse 60% 80% at 80% 80%, rgba(212,168,67,.10) 0%, transparent 60%);
     pointer-events:none; z-index:0;
   }
+
+  /* PETALS */
   .petals { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
   .petal {
     position:absolute;
@@ -45,151 +48,254 @@
   }
   @keyframes fall {
     0%   { transform: translateY(-20px) rotate(0deg); opacity:0; }
-    10%  { opacity:.7; }
-    90%  { opacity:.4; }
+    10%  { opacity:.6; }
+    90%  { opacity:.3; }
     100% { transform: translateY(110vh) rotate(720deg); opacity:0; }
   }
-  .screen { display:none; min-height:100vh; position:relative; z-index:1; }
+
+  /* SCREENS */
+  .screen { display:none; min-height:100vh; min-height:100dvh; position:relative; z-index:1; }
   .screen.active { display:flex; }
 
-  /* ── LOGIN ── */
+  /* ═══ LOGIN ═══ */
   #screen-login {
-    flex-direction:column; align-items:center; justify-content:center; padding:40px 24px; text-align:center;
+    flex-direction:column; align-items:center; justify-content:center;
+    padding: clamp(24px, 5vw, 60px) clamp(16px, 4vw, 40px);
+    text-align:center;
   }
   .login-card {
-    background: rgba(255,255,255,.78);
+    background: rgba(255,255,255,.82);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(212,168,67,.25);
-    border-radius: 28px;
-    padding: 56px 48px;
-    max-width: 420px; width:100%;
-    box-shadow: 0 20px 60px rgba(194,96,122,.12), 0 2px 8px rgba(212,168,67,.08);
+    border-radius: clamp(20px, 4vw, 32px);
+    padding: clamp(32px, 6vw, 56px) clamp(24px, 6vw, 52px);
+    width: min(420px, 100%);
+    box-shadow: 0 20px 60px rgba(194,96,122,.12);
     animation: riseIn .9s cubic-bezier(.22,1,.36,1) both;
   }
-  .crown { font-size:52px; margin-bottom:8px; animation:float 3s ease-in-out infinite; display:block; }
+  .crown {
+    font-size: clamp(40px, 8vw, 56px);
+    margin-bottom: 8px;
+    animation: float 3s ease-in-out infinite;
+    display:block;
+  }
   @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
   .login-title {
-    font-family:'Playfair Display',serif; font-size:2.4rem; font-weight:700;
-    color:var(--brown); line-height:1.1; margin-bottom:10px;
+    font-family:'Playfair Display',serif;
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    font-weight:700; color:var(--brown); line-height:1.1; margin-bottom:10px;
   }
-  .login-sub { font-size:1.05rem; color:var(--muted); font-style:italic; margin-bottom:36px; line-height:1.5; }
+  .login-sub {
+    font-size: clamp(.9rem, 2.5vw, 1.05rem);
+    color:var(--muted); font-style:italic; margin-bottom:32px; line-height:1.6;
+  }
   .btn-login {
-    display:inline-flex; align-items:center; gap:12px;
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
     background: linear-gradient(135deg, var(--rose-d), var(--gold));
-    color:white; border:none; padding:14px 32px; border-radius:50px;
-    font-family:'Playfair Display',serif; font-size:1rem; font-weight:700;
-    cursor:pointer; text-decoration:none;
+    color:white; border:none;
+    padding: clamp(12px, 2.5vw, 15px) clamp(24px, 5vw, 36px);
+    border-radius:50px;
+    font-family:'Playfair Display',serif;
+    font-size: clamp(.9rem, 2.5vw, 1rem);
+    font-weight:700; cursor:pointer; text-decoration:none;
     transition: transform .2s, box-shadow .2s;
     box-shadow: 0 6px 24px rgba(194,96,122,.3);
+    width: 100%; max-width: 280px;
+    touch-action: manipulation;
   }
-  .btn-login:hover { transform:translateY(-2px); box-shadow:0 10px 32px rgba(194,96,122,.4); }
-  .login-footer { margin-top:24px; font-size:.8rem; color:var(--muted); }
+  .btn-login:hover, .btn-login:active { transform:translateY(-2px); box-shadow:0 10px 32px rgba(194,96,122,.4); }
+  .login-footer { margin-top:20px; font-size:.8rem; color:var(--muted); }
 
-  /* ── BLOCKED ── */
+  /* ═══ BLOCKED ═══ */
   #screen-blocked {
-    flex-direction:column; align-items:center; justify-content:center; padding:40px 24px; text-align:center;
+    flex-direction:column; align-items:center; justify-content:center;
+    padding: clamp(24px, 5vw, 60px) clamp(16px, 4vw, 40px); text-align:center;
   }
   .blocked-card {
-    background:rgba(255,255,255,.78); backdrop-filter:blur(20px);
-    border:1px solid rgba(232,160,176,.3); border-radius:28px;
-    padding:56px 48px; max-width:440px; width:100%;
+    background:rgba(255,255,255,.82); backdrop-filter:blur(20px);
+    border:1px solid rgba(232,160,176,.3);
+    border-radius: clamp(20px, 4vw, 32px);
+    padding: clamp(32px, 6vw, 56px) clamp(24px, 6vw, 52px);
+    width: min(440px, 100%);
     animation:riseIn .7s ease both;
   }
-  .blocked-emoji { font-size:56px; margin-bottom:16px; display:block; }
-  .blocked-title { font-family:'Playfair Display',serif; font-size:2rem; color:var(--brown); margin-bottom:12px; }
-  .blocked-text { color:var(--muted); font-size:1.05rem; font-style:italic; line-height:1.7; }
+  .blocked-emoji { font-size: clamp(40px, 8vw, 56px); margin-bottom:16px; display:block; }
+  .blocked-title {
+    font-family:'Playfair Display',serif;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    color:var(--brown); margin-bottom:12px;
+  }
+  .blocked-text {
+    color:var(--muted);
+    font-size: clamp(.9rem, 2.5vw, 1.05rem);
+    font-style:italic; line-height:1.8;
+  }
 
-  /* ── LOADING ── */
+  /* ═══ LOADING ═══ */
   #screen-loading {
-    flex-direction:column; align-items:center; justify-content:center; gap:24px; text-align:center; padding:40px;
+    flex-direction:column; align-items:center; justify-content:center;
+    gap:24px; text-align:center; padding:40px;
   }
   .loading-ring {
-    width:64px; height:64px;
+    width: clamp(48px, 10vw, 64px);
+    height: clamp(48px, 10vw, 64px);
     border:3px solid rgba(212,168,67,.2);
     border-top-color:var(--gold); border-right-color:var(--rose-d);
     border-radius:50%; animation:spin 1s linear infinite;
   }
   @keyframes spin { to{transform:rotate(360deg)} }
-  .loading-text { font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--brown); font-style:italic; }
+  .loading-text {
+    font-family:'Playfair Display',serif;
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    color:var(--brown); font-style:italic;
+    max-width: 280px;
+  }
 
-  /* ── MURAL ── */
-  #screen-mural { flex-direction:column; align-items:center; padding:60px 24px 80px; }
-  .mural-header { text-align:center; margin-bottom:48px; animation:riseIn .8s ease both; }
-  .ornament { font-size:1.4rem; color:var(--gold); letter-spacing:8px; display:block; margin-bottom:8px; }
-  .mural-title { font-family:'Playfair Display',serif; font-size:clamp(1.6rem,4vw,2.4rem); font-weight:700; color:var(--brown); font-style:italic; }
-  .mural-date { color:var(--muted); font-size:.9rem; margin-top:6px; letter-spacing:2px; text-transform:uppercase; }
+  /* ═══ MURAL ═══ */
+  #screen-mural {
+    flex-direction:column; align-items:center;
+    padding: clamp(40px, 8vw, 70px) clamp(16px, 4vw, 24px) clamp(60px, 10vw, 100px);
+    gap: clamp(20px, 4vw, 32px);
+  }
+
+  .mural-header { text-align:center; animation:riseIn .8s ease both; width:100%; }
+  .ornament {
+    font-size: clamp(1rem, 3vw, 1.4rem);
+    color:var(--gold); letter-spacing: clamp(4px, 1.5vw, 10px);
+    display:block; margin-bottom:8px;
+  }
+  .mural-title {
+    font-family:'Playfair Display',serif;
+    font-size: clamp(1.5rem, 4vw, 2.4rem);
+    font-weight:700; color:var(--brown); font-style:italic;
+  }
+  .mural-date {
+    color:var(--muted);
+    font-size: clamp(.75rem, 2vw, .9rem);
+    margin-top:6px; letter-spacing:2px; text-transform:uppercase;
+  }
+
+  /* Cards */
+  .card {
+    background:rgba(255,255,255,.82); backdrop-filter:blur(24px);
+    border:1px solid rgba(212,168,67,.2);
+    border-radius: clamp(16px, 4vw, 28px);
+    width: min(620px, 100%);
+    box-shadow:0 16px 48px rgba(194,96,122,.08);
+  }
 
   .profile-card {
-    background:rgba(255,255,255,.82); backdrop-filter:blur(24px);
-    border:1px solid rgba(212,168,67,.2); border-radius:28px;
-    padding:40px; max-width:600px; width:100%;
-    box-shadow:0 24px 64px rgba(194,96,122,.1), 0 2px 8px rgba(212,168,67,.08);
-    margin-bottom:32px; animation:riseIn .9s .1s ease both; text-align:center;
+    padding: clamp(24px, 5vw, 44px);
+    text-align:center;
+    animation:riseIn .9s .1s ease both;
   }
   .profile-photo-wrap { position:relative; display:inline-block; margin-bottom:20px; }
   .profile-photo {
-    width:120px; height:120px; border-radius:50%; object-fit:cover;
+    width: clamp(90px, 20vw, 120px);
+    height: clamp(90px, 20vw, 120px);
+    border-radius:50%; object-fit:cover;
     border:4px solid white;
     box-shadow:0 0 0 3px var(--gold), 0 8px 32px rgba(194,96,122,.25);
+    display:block;
   }
   .profile-photo-ring {
     position:absolute; inset:-8px; border-radius:50%;
     border:2px dashed rgba(212,168,67,.4);
     animation:spin 20s linear infinite;
   }
-  .profile-name { font-family:'Playfair Display',serif; font-size:2rem; font-weight:700; color:var(--brown); margin-bottom:4px; }
-  .profile-login { font-size:.9rem; color:var(--muted); letter-spacing:2px; text-transform:uppercase; margin-bottom:6px; }
-  .profile-campus { font-size:.85rem; color:var(--gold); font-style:italic; }
+  .profile-name {
+    font-family:'Playfair Display',serif;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight:700; color:var(--brown); margin-bottom:4px;
+    word-break: break-word;
+  }
+  .profile-login {
+    font-size: clamp(.75rem, 2vw, .9rem);
+    color:var(--muted); letter-spacing:2px; text-transform:uppercase; margin-bottom:6px;
+  }
+  .profile-campus { font-size: clamp(.8rem, 2vw, .9rem); color:var(--gold); font-style:italic; }
   .divider {
     display:flex; align-items:center; gap:12px;
-    margin:28px 0; color:rgba(212,168,67,.5); font-size:1rem; letter-spacing:4px;
+    margin: clamp(16px, 4vw, 28px) 0;
+    color:rgba(212,168,67,.5); font-size:1rem; letter-spacing:4px;
   }
   .divider::before,.divider::after {
     content:''; flex:1; height:1px;
     background:linear-gradient(to right,transparent,rgba(212,168,67,.4),transparent);
   }
+  .profile-motto {
+    font-size: clamp(.9rem, 2.5vw, 1rem);
+    color:var(--muted); font-style:italic; line-height:1.8;
+  }
 
   .frase-card {
     background:linear-gradient(135deg,rgba(232,160,176,.12),rgba(212,168,67,.08));
-    border:1px solid rgba(212,168,67,.2); border-radius:20px;
-    padding:28px 32px; max-width:600px; width:100%;
-    margin-bottom:24px; text-align:center; animation:riseIn .9s .2s ease both;
+    border:1px solid rgba(212,168,67,.2);
+    border-radius: clamp(16px, 4vw, 24px);
+    padding: clamp(20px, 4vw, 32px) clamp(20px, 5vw, 36px);
+    width: min(620px, 100%);
+    text-align:center; animation:riseIn .9s .2s ease both;
   }
-  .frase-label { font-size:.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:12px; display:block; }
-  .frase-text { font-family:'Playfair Display',serif; font-size:clamp(1.1rem,2.5vw,1.4rem); font-style:italic; color:var(--brown); line-height:1.6; }
+  .frase-label {
+    font-size: clamp(.65rem, 1.5vw, .75rem);
+    letter-spacing:3px; text-transform:uppercase; color:var(--gold);
+    margin-bottom:12px; display:block;
+  }
+  .frase-text {
+    font-family:'Playfair Display',serif;
+    font-size: clamp(1rem, 3vw, 1.35rem);
+    font-style:italic; color:var(--brown); line-height:1.7;
+  }
 
   .poema-card {
-    background:rgba(255,255,255,.75); backdrop-filter:blur(16px);
-    border:1px solid rgba(232,160,176,.25); border-radius:28px;
-    padding:40px 44px; max-width:600px; width:100%;
-    margin-bottom:32px; animation:riseIn .9s .3s ease both;
+    padding: clamp(24px, 5vw, 44px) clamp(20px, 5vw, 48px);
+    animation:riseIn .9s .3s ease both;
     position:relative; overflow:hidden;
   }
   .poema-card::before {
-    content:'"'; position:absolute; top:-20px; left:16px;
-    font-family:'Playfair Display',serif; font-size:140px;
-    color:rgba(212,168,67,.08); line-height:1; pointer-events:none;
+    content:'"'; position:absolute; top:-20px; left:12px;
+    font-family:'Playfair Display',serif;
+    font-size: clamp(80px, 18vw, 140px);
+    color:rgba(212,168,67,.07); line-height:1; pointer-events:none;
   }
-  .poema-label { font-size:.75rem; letter-spacing:3px; text-transform:uppercase; color:var(--rose-d); margin-bottom:20px; display:block; text-align:center; }
-  .poema-text { font-family:'Cormorant Garamond',serif; font-size:1.05rem; line-height:2; color:var(--text); white-space:pre-line; text-align:center; font-style:italic; }
-  .poema-assinatura { text-align:right; margin-top:24px; font-size:.85rem; color:var(--gold); font-style:italic; }
+  .poema-label {
+    font-size: clamp(.65rem, 1.5vw, .75rem);
+    letter-spacing:3px; text-transform:uppercase; color:var(--rose-d);
+    margin-bottom: clamp(14px, 3vw, 22px); display:block; text-align:center;
+  }
+  .poema-text {
+    font-family:'Cormorant Garamond',serif;
+    font-size: clamp(.95rem, 2.5vw, 1.08rem);
+    line-height: clamp(1.8, 0.3 + 4vw, 2.1);
+    color:var(--text); white-space:pre-line; text-align:center; font-style:italic;
+  }
+  .poema-assinatura {
+    text-align:right; margin-top: clamp(16px, 3vw, 24px);
+    font-size: clamp(.75rem, 2vw, .88rem);
+    color:var(--gold); font-style:italic;
+  }
 
-  .mural-footer { text-align:center; max-width:600px; animation:riseIn .9s .4s ease both; }
-  .footer-hearts { font-size:1.4rem; letter-spacing:6px; margin-bottom:8px; }
-  .footer-text { font-size:.85rem; color:var(--muted); font-style:italic; }
+  .mural-footer { text-align:center; width:min(620px,100%); animation:riseIn .9s .4s ease both; }
+  .footer-hearts { font-size: clamp(1rem, 3vw, 1.4rem); letter-spacing:6px; margin-bottom:8px; }
+  .footer-text { font-size: clamp(.78rem, 2vw, .88rem); color:var(--muted); font-style:italic; line-height:1.7; }
 
   @keyframes riseIn {
-    from{opacity:0;transform:translateY(24px)}
+    from{opacity:0;transform:translateY(20px)}
     to{opacity:1;transform:translateY(0)}
   }
-  @media(max-width:480px){
-    .login-card,.blocked-card{padding:40px 28px}
-    .poema-card{padding:32px 24px}
+
+  /* Tablet ajustes */
+  @media(min-width:600px) {
+    .btn-login { width:auto; }
+  }
+
+  /* Muito pequeno */
+  @media(max-width:360px) {
+    .poema-card::before { display:none; }
   }
 </style>
 </head>
 <body>
-
 <div class="petals" id="petals"></div>
 
 <!-- LOGIN -->
@@ -228,13 +334,14 @@
 
 <!-- MURAL -->
 <div class="screen" id="screen-mural">
+
   <div class="mural-header">
     <span class="ornament">❧ ✦ ❧</span>
     <h1 class="mural-title">O teu mural especial</h1>
     <p class="mural-date" id="mural-date"></p>
   </div>
 
-  <div class="profile-card">
+  <div class="card profile-card">
     <div class="profile-photo-wrap">
       <img class="profile-photo" id="profile-img" src="" alt="Foto de perfil">
       <div class="profile-photo-ring"></div>
@@ -243,7 +350,7 @@
     <p class="profile-login" id="profile-login"></p>
     <p class="profile-campus" id="profile-campus"></p>
     <div class="divider">✦</div>
-    <p style="font-size:1rem;color:var(--muted);font-style:italic;line-height:1.7;">
+    <p class="profile-motto">
       Fizeste parte da história da 42.<br>
       Cada linha de código que escreves é um acto de coragem.
     </p>
@@ -254,7 +361,7 @@
     <p class="frase-text" id="frase-text"></p>
   </div>
 
-  <div class="poema-card">
+  <div class="card poema-card">
     <span class="poema-label">🌸 Poema escrito só para ti 🌸</span>
     <p class="poema-text" id="poema-text"></p>
     <p class="poema-assinatura">— Os teus colegas da 42, com amor 💛</p>
@@ -262,52 +369,41 @@
 
   <div class="mural-footer">
     <p class="footer-hearts">🌸 💛 🌸</p>
-    <p class="footer-text">Este mural foi criado uma única vez, só para ti.<br>Guarda-o no coração e volta sempre que precisares de um abraço.</p>
+    <p class="footer-text">
+      Este mural foi criado uma única vez, só para ti.<br>
+      Volta sempre que precisares de um abraço. 🌸
+    </p>
   </div>
+
 </div>
 
 <script>
-// ══════════════════════════════════════
-// CONFIGURAÇÃO — edita estas 2 linhas
-// ══════════════════════════════════════
-const CLIENT_ID     = "u-s4t2ud-47708765e1a89abb0e7363a395fc8284f0076fab800be29bd7f115657f2f69f0";
-const ANTHROPIC_KEY = "COLA_AQUI_A_TUA_API_KEY"; // sk-ant-...
-// REDIRECT_URI vem das env vars no Netlify — não precisas de mudar aqui
+const CLIENT_ID = "u-s4t2ud-47708765e1a89abb0e7363a395fc8284f0076fab800be29bd7f115657f2f69f0";
 
-// ══════════════════════════════════════
 // PETALS
-// ══════════════════════════════════════
-(function spawnPetals() {
+(function() {
   const c = document.getElementById('petals');
-  for (let i = 0; i < 20; i++) {
+  const n = window.innerWidth < 480 ? 10 : 20;
+  for (let i = 0; i < n; i++) {
     const p = document.createElement('div');
     p.className = 'petal';
-    p.style.cssText = `
-      left:${Math.random()*100}vw;
-      width:${8+Math.random()*10}px;
-      height:${10+Math.random()*14}px;
-      animation-duration:${8+Math.random()*12}s;
-      animation-delay:${Math.random()*14}s;
-    `;
+    p.style.cssText = `left:${Math.random()*100}vw;width:${8+Math.random()*10}px;height:${10+Math.random()*14}px;animation-duration:${8+Math.random()*12}s;animation-delay:${Math.random()*14}s;`;
     c.appendChild(p);
   }
 })();
 
-// ══════════════════════════════════════
 // SCREENS
-// ══════════════════════════════════════
 function show(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
 }
 function setLoading(msg) {
   document.getElementById('loading-msg').textContent = msg;
   show('screen-loading');
 }
 
-// ══════════════════════════════════════
-// OAUTH2 — CODE FLOW
-// ══════════════════════════════════════
+// LOGIN
 document.getElementById('btn-login-42').addEventListener('click', e => {
   e.preventDefault();
   const redirect = encodeURIComponent(window.location.origin + window.location.pathname);
@@ -320,6 +416,7 @@ function getCodeFromUrl() {
   return new URLSearchParams(window.location.search).get('code');
 }
 
+// Trocar código pelo token + perfil (no servidor, sem CORS)
 async function exchangeCode(code) {
   const res = await fetch('/.netlify/functions/token', {
     method: 'POST',
@@ -327,149 +424,70 @@ async function exchangeCode(code) {
     body: JSON.stringify({ code })
   });
   const data = await res.json();
-  if (!res.ok) throw new Error('Erro ao trocar código pelo token');
-  return data.user; // devolve o perfil completo, não o token
+  if (!res.ok) throw new Error('Erro ao obter perfil');
+  return data.user;
 }
 
-// ══════════════════════════════════════
-// CLAUDE API
-// ══════════════════════════════════════
-async function generateContent(firstName) {
-  const prompt = `És um poeta e escritor carinhoso, criativo e amoroso.
-Escreve para ${firstName}, uma cadete feminina da escola de programação 42.
-É o Mês Internacional da Mulher (Março).
-
-Cria exatamente dois elementos separados por ---DIVISOR---:
-
-1. FRASE: Uma frase motivacional única (máximo 2 linhas), pessoal e calorosa, que use o nome ${firstName}, que celebre a sua coragem como mulher na tecnologia, que a faça sentir especial, necessária e amada.
-
-2. POEMA: 4 estrofes de 4 versos cada. Amoroso, criativo, carinhoso. Celebra-a como mulher, como programadora corajosa, como princesa que merece ser cuidada. Transmite que ela é especial, amada, necessária e bem-vinda. Usa o nome ${firstName} pelo menos uma vez. Escreve em português de Portugal.
-
-Responde APENAS neste formato exato:
-FRASE: [a frase]
----DIVISOR---
-POEMA:
-[o poema]`;
-
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+// Gerar ou carregar conteúdo (no servidor, persistente)
+async function fetchOrCreateContent(login, firstName) {
+  const res = await fetch('/.netlify/functions/mural', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': ANTHROPIC_KEY,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true'
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
-      messages: [{ role: 'user', content: prompt }]
-    })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ login, firstName })
   });
-
-  if (!res.ok) throw new Error('Erro na API do Claude');
+  if (!res.ok) throw new Error('Erro ao gerar conteúdo');
   const data = await res.json();
-  const raw = data.content[0].text;
-  const parts = raw.split('---DIVISOR---');
-  return {
-    frase: parts[0].replace('FRASE:', '').trim(),
-    poema: parts[1] ? parts[1].replace('POEMA:', '').trim() : raw
-  };
+  return data.content;
 }
 
-// ══════════════════════════════════════
-// NETLIFY — guardar/carregar mural
-// ══════════════════════════════════════
-async function saveMural(login, data) {
-  try {
-    await fetch('/.netlify/functions/mural', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ login, data })
-    });
-  } catch (e) { /* continua mesmo se falhar */ }
-  // Cache local sempre
-  localStorage.setItem(`women42_mural_${login}`, JSON.stringify(data));
-}
-
-async function loadMural(login) {
-  // Cache local primeiro (mais rápido)
-  const local = localStorage.getItem(`women42_mural_${login}`);
-  if (local) return JSON.parse(local);
-  // Tenta buscar do Netlify (outro dispositivo)
-  try {
-    const res = await fetch(`/.netlify/functions/mural?login=${encodeURIComponent(login)}`);
-    if (res.ok) {
-      const data = await res.json();
-      if (data && data.login) {
-        localStorage.setItem(`women42_mural_${login}`, JSON.stringify(data));
-        return data;
-      }
-    }
-  } catch (e) { /* sem mural guardado */ }
-  return null;
-}
-
-// ══════════════════════════════════════
 // RENDER
-// ══════════════════════════════════════
 function renderMural(d) {
-  document.getElementById('profile-img').src   = d.photo;
-  document.getElementById('profile-name').textContent   = d.displayName;
-  document.getElementById('profile-login').textContent  = d.login;
+  document.getElementById('profile-img').src = d.photo || '';
+  document.getElementById('profile-name').textContent  = d.displayName;
+  document.getElementById('profile-login').textContent = '@' + d.login;
   document.getElementById('profile-campus').textContent = d.campus;
-  document.getElementById('frase-text').textContent     = d.frase;
-  document.getElementById('poema-text').textContent     = d.poema;
+  document.getElementById('frase-text').textContent    = d.frase;
+  document.getElementById('poema-text').textContent    = d.poema;
   const dt = new Date(d.createdAt);
   document.getElementById('mural-date').textContent =
     dt.toLocaleDateString('pt-PT', { day:'numeric', month:'long', year:'numeric' });
   show('screen-mural');
 }
 
-// ══════════════════════════════════════
 // MAIN
-// ══════════════════════════════════════
 async function main() {
   const code = getCodeFromUrl();
-
   if (!code) { show('screen-login'); return; }
-
-  // Limpar URL
   history.replaceState(null, '', window.location.pathname);
-
   setLoading('A verificar o teu perfil na 42...');
 
   try {
     const user = await exchangeCode(code);
 
-    // Verificar género — se não for mulher, mostrar ecrã bloqueado
+    // Verificar género
     const gender = (user.gender || '').toLowerCase();
     const isFemale = gender === 'female' || gender === 'f' || gender === 'woman';
-    // Se género está definido e não é feminino → bloquear
-    // Se género está vazio → deixar passar (alguns perfis não têm género definido)
-    if (gender && !isFemale) {
-      show('screen-blocked'); return;
-    }
+    if (gender && !isFemale) { show('screen-blocked'); return; }
 
     const firstName   = user.first_name || user.login;
     const displayName = `${user.first_name||''} ${user.last_name||''}`.trim() || user.login;
     const photo       = user.image?.versions?.medium || user.image?.link || '';
-    const campus      = user.campus?.[0]?.name ? `📍 ${user.campus[0].name}` : '';
+    const campus      = user.campus?.[0]?.name ? '📍 ' + user.campus[0].name : '';
 
-    // Verificar se mural já existe no Netlify
-    setLoading('A procurar o teu mural...');
-    const saved = await loadMural(user.login);
-    if (saved) { renderMural(saved); return; }
+    setLoading(`A preparar o teu mural, ${firstName}... 🌸`);
 
-    // Gerar mural novo
-    setLoading(`A criar o teu poema especial, ${firstName}... 🌸`);
+    // Busca ou cria conteúdo no servidor (persistente, qualquer dispositivo)
+    const content = await fetchOrCreateContent(user.login, firstName);
 
-    const { frase, poema } = await generateContent(firstName);
-
-    const muralData = { login: user.login, displayName, photo, campus, frase, poema, createdAt: new Date().toISOString() };
-
-    // Guardar no Netlify (persistente em qualquer dispositivo)
-    await saveMural(user.login, muralData);
-    renderMural(muralData);
+    renderMural({
+      login: user.login,
+      displayName,
+      photo,
+      campus,
+      frase: content.frase,
+      poema: content.poema,
+      createdAt: new Date().toISOString()
+    });
 
   } catch (err) {
     console.error(err);
