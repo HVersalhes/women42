@@ -324,7 +324,7 @@ function logout() {
 // LOGIN
 document.getElementById('btn-login-42').addEventListener('click', e => {
   e.preventDefault();
-  const redirect = encodeURIComponent(window.location.origin + window.location.pathname);
+  const redirect = encodeURIComponent('https://42woman.netlify.app');
   window.location.href =
     `https://api.intra.42.fr/oauth/authorize?client_id=${CLIENT_ID}` +
     `&redirect_uri=${redirect}&response_type=code&scope=public`;
@@ -426,6 +426,13 @@ async function main() {
   try {
     const user = await exchangeCode(code);
     currentUser = user;
+
+    // Admin: redirecionar para painel
+    if (user.login === 'hcosta') {
+      sessionStorage.setItem('adminUser', JSON.stringify(user));
+      window.location.href = '/admin.html';
+      return;
+    }
 
     const status = await registerUser(user);
 
