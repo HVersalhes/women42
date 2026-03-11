@@ -1,9 +1,9 @@
 [build]
   functions = "netlify/functions"
-  command = "npm install"
+  command = "npm install --prefix netlify/functions"
 
-[[plugins]]
-  package = "@netlify/plugin-functions-install-core"
+[functions]
+  node_bundler = "esbuild"
 
 [[redirects]]
   from = "/*"
