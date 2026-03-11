@@ -13,7 +13,8 @@ exports.handler = async (event) => {
     const { code } = JSON.parse(event.body);
     if (!code) return { statusCode: 400, headers, body: JSON.stringify({ error: 'Código em falta' }) };
 
-    const res = await fetch('https://api.intra.42.fr/oauth/token', {
+    // 1. Trocar código pelo token
+    const tokenRes = await fetch('https://api.intra.42.fr/oauth/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -25,10 +26,19 @@ exports.handler = async (event) => {
       })
     });
 
-    const data = await res.json();
-    if (!res.ok) return { statusCode: 400, headers, body: JSON.stringify({ error: data }) };
+    const tokenData = await tokenRes.json();
+    if (!tokenRes.ok) return { statusCode: 400, headers, body: JSON.stringify({ error: tokenData }) };
 
-    return { statusCode: 200, headers, body: JSON.stringify({ access_token: data.access_token }) };
+    // 2. Buscar perfil do utilizador (evita CORS no browser)
+    const userRes = await fetch('https://api.intra.42.fr/v2/me', {
+      headers: { Authorization: `Bearer ${tokenData.access_token}` }
+    });
+
+    const user = await userRes.json();
+    if (!userRes.ok) return { statusCode: 400, headers, body: JSON.stringify({ error: user }) };
+
+    // 3. Devolver perfil completo ao browser
+    return { statusCode: 200, headers, body: JSON.stringify({ user }) };
 
   } catch (err) {
     return { statusCode: 500, headers, body: JSON.stringify({ error: err.message }) };
