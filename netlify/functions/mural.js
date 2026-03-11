@@ -29,7 +29,7 @@ exports.handler = async (event) => {
     const prompt = "Es um poeta carinhoso e amoroso.\nEscreve para " + firstName + ", uma cadete da escola de programacao 42, no Mes da Mulher.\n\nResponde APENAS neste formato:\nFRASE: [uma frase motivacional unica de 1-2 linhas com o nome " + firstName + "]\n---DIVISOR---\nPOEMA:\n[um poema de 4 estrofes de 4 versos, amoroso, que use o nome " + firstName + ", em portugues de Portugal]";
 
     const geminiRes = await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + process.env.GEMINI_KEY,
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + process.env.GEMINI_KEY,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
