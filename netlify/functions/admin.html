@@ -13,41 +13,14 @@
   }
   *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
   body { background:var(--cream); color:var(--text); font-family:'Cormorant Garamond',serif; min-height:100vh; }
-
-  /* LOGIN ADMIN */
-  #screen-login {
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    min-height:100vh; padding:24px; text-align:center;
-  }
-  .admin-login-card {
-    background:rgba(255,255,255,.9); border:1px solid rgba(212,168,67,.25);
-    border-radius:24px; padding:48px 40px; width:min(400px,100%);
-    box-shadow:0 20px 60px rgba(194,96,122,.12);
-  }
-  .admin-login-card h1 { font-family:'Playfair Display',serif; font-size:2rem; color:var(--brown); margin-bottom:8px; }
-  .admin-login-card p { color:var(--muted); font-style:italic; margin-bottom:32px; }
-  .btn-42 {
-    display:inline-flex; align-items:center; gap:10px;
-    background:linear-gradient(135deg,var(--rose-d),var(--gold));
-    color:white; border:none; padding:14px 32px; border-radius:50px;
-    font-family:'Playfair Display',serif; font-size:1rem; font-weight:700;
-    cursor:pointer; width:100%; justify-content:center;
-    box-shadow:0 6px 24px rgba(194,96,122,.3); transition:.2s;
-  }
-  .btn-42:hover { transform:translateY(-2px); }
-
-  /* LOADING */
+  #screen-login { display:none; }
   #screen-loading { display:none; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; gap:20px; }
   .ring { width:56px; height:56px; border:3px solid rgba(212,168,67,.2); border-top-color:var(--gold); border-right-color:var(--rose-d); border-radius:50%; animation:spin 1s linear infinite; }
   @keyframes spin { to{transform:rotate(360deg)} }
   .loading-txt { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--brown); font-style:italic; }
-
-  /* DENIED */
   #screen-denied { display:none; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; text-align:center; padding:24px; }
   #screen-denied h2 { font-family:'Playfair Display',serif; font-size:2rem; color:var(--red); margin-bottom:12px; }
   #screen-denied p { color:var(--muted); font-size:1.1rem; }
-
-  /* ADMIN PANEL */
   #screen-admin { display:none; flex-direction:column; min-height:100vh; }
   .admin-header {
     background:linear-gradient(135deg,var(--rose-d),var(--gold));
@@ -60,23 +33,15 @@
   .admin-stats { display:flex; gap:16px; flex-wrap:wrap; }
   .stat { background:rgba(255,255,255,.2); border-radius:12px; padding:6px 16px; font-size:.85rem; text-align:center; }
   .stat strong { display:block; font-size:1.3rem; font-family:'Playfair Display',serif; }
-
   .admin-body { padding:clamp(16px,4vw,32px); display:flex; flex-direction:column; gap:32px; max-width:1200px; margin:0 auto; width:100%; }
-
-  /* NOTIFICAÇÕES / PENDENTES */
-  .section-title {
-    font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--brown);
-    margin-bottom:16px; display:flex; align-items:center; gap:10px;
-  }
+  .section-title { font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--brown); margin-bottom:16px; display:flex; align-items:center; gap:10px; }
   .badge { background:var(--rose-d); color:white; border-radius:50px; padding:2px 10px; font-size:.8rem; font-family:'Cormorant Garamond',serif; }
   .empty-msg { color:var(--muted); font-style:italic; font-size:1rem; padding:20px 0; }
-
   .pending-list { display:flex; flex-direction:column; gap:12px; }
   .pending-card {
     background:white; border:1px solid rgba(212,168,67,.2); border-radius:16px;
     padding:16px 20px; display:flex; align-items:center; gap:16px; flex-wrap:wrap;
-    box-shadow:0 4px 16px rgba(194,96,122,.06);
-    animation:slideIn .4s ease both;
+    box-shadow:0 4px 16px rgba(194,96,122,.06); animation:slideIn .4s ease both;
   }
   @keyframes slideIn { from{opacity:0;transform:translateX(-16px)} to{opacity:1;transform:translateX(0)} }
   .pending-photo { width:52px; height:52px; border-radius:50%; object-fit:cover; border:2px solid var(--gold); flex-shrink:0; }
@@ -86,65 +51,34 @@
   .pending-campus { font-size:.8rem; color:var(--gold); font-style:italic; }
   .pending-time { font-size:.75rem; color:var(--muted); }
   .pending-actions { display:flex; gap:8px; flex-shrink:0; }
-  .btn-approve {
-    background:var(--green); color:white; border:none; border-radius:50px;
-    padding:8px 20px; font-family:'Playfair Display',serif; font-size:.9rem;
-    cursor:pointer; transition:.2s; white-space:nowrap;
-  }
+  .btn-approve { background:var(--green); color:white; border:none; border-radius:50px; padding:8px 20px; font-family:'Playfair Display',serif; font-size:.9rem; cursor:pointer; transition:.2s; white-space:nowrap; }
   .btn-approve:hover { opacity:.85; transform:scale(1.04); }
-  .btn-reject {
-    background:var(--red); color:white; border:none; border-radius:50px;
-    padding:8px 20px; font-family:'Playfair Display',serif; font-size:.9rem;
-    cursor:pointer; transition:.2s; white-space:nowrap;
-  }
+  .btn-reject { background:var(--red); color:white; border:none; border-radius:50px; padding:8px 20px; font-family:'Playfair Display',serif; font-size:.9rem; cursor:pointer; transition:.2s; white-space:nowrap; }
   .btn-reject:hover { opacity:.85; transform:scale(1.04); }
-
-  /* MURAL COLETIVO */
-  .mural-grid {
-    display:grid;
-    grid-template-columns: repeat(auto-fill, minmax(clamp(80px,15vw,110px), 1fr));
-    gap:clamp(12px,2vw,20px);
-  }
-  .mural-item {
-    display:flex; flex-direction:column; align-items:center; gap:8px;
-    animation:riseIn .5s ease both;
-  }
+  .mural-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(clamp(80px,15vw,110px), 1fr)); gap:clamp(12px,2vw,20px); }
+  .mural-item { display:flex; flex-direction:column; align-items:center; gap:8px; animation:riseIn .5s ease both; }
   @keyframes riseIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-  .mural-item img {
-    width:clamp(64px,12vw,90px); height:clamp(64px,12vw,90px);
-    border-radius:50%; object-fit:cover;
-    border:3px solid white; box-shadow:0 0 0 2px var(--gold);
-    transition:.2s;
-  }
+  .mural-item img { width:clamp(64px,12vw,90px); height:clamp(64px,12vw,90px); border-radius:50%; object-fit:cover; border:3px solid white; box-shadow:0 0 0 2px var(--gold); transition:.2s; }
   .mural-item img:hover { transform:scale(1.08); box-shadow:0 0 0 3px var(--rose-d); }
   .mural-item span { font-size:clamp(.65rem,1.5vw,.8rem); color:var(--brown); text-align:center; font-family:'Playfair Display',serif; }
-
-  .refresh-btn {
-    background:transparent; border:1px solid rgba(212,168,67,.4); color:var(--muted);
-    padding:8px 20px; border-radius:50px; font-family:'Cormorant Garamond',serif;
-    font-size:.9rem; cursor:pointer; transition:.2s; align-self:flex-start;
-  }
+  .refresh-btn { background:transparent; border:1px solid rgba(212,168,67,.4); color:var(--muted); padding:8px 20px; border-radius:50px; font-family:'Cormorant Garamond',serif; font-size:.9rem; cursor:pointer; transition:.2s; align-self:flex-start; }
   .refresh-btn:hover { border-color:var(--gold); color:var(--gold); }
 </style>
 </head>
 <body>
 
-<!-- SEM ACESSO DIRETO - redireciona para index -->
-<div id="screen-login" style="display:none;"></div>
+<div id="screen-login"></div>
 
-<!-- LOADING -->
 <div id="screen-loading" style="display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:20px;">
   <div class="ring"></div>
   <p class="loading-txt" id="loading-txt">A verificar identidade...</p>
 </div>
 
-<!-- DENIED -->
 <div id="screen-denied" style="display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:24px;">
   <h2>🚫 Acesso Negado</h2>
   <p>Este painel é exclusivo para o administrador.</p>
 </div>
 
-<!-- ADMIN PANEL -->
 <div id="screen-admin" style="display:none;flex-direction:column;min-height:100vh;">
   <div class="admin-header">
     <h1>👑 Women42 — Admin</h1>
@@ -155,7 +89,6 @@
     </div>
   </div>
   <div class="admin-body">
-
     <div>
       <div class="section-title">
         🔔 Pendentes de aprovação
@@ -165,20 +98,17 @@
         <p class="empty-msg">Nenhuma cadete pendente. 🌸</p>
       </div>
     </div>
-
     <div>
       <div class="section-title">🌸 Cadetes aprovadas</div>
       <div class="mural-grid" id="mural-grid">
         <p class="empty-msg">Nenhuma cadete aprovada ainda.</p>
       </div>
     </div>
-
     <button class="refresh-btn" id="btn-refresh">↻ Atualizar</button>
   </div>
 </div>
 
 <script>
-const CLIENT_ID = "u-s4t2ud-47708765e1a89abb0e7363a395fc8284f0076fab800be29bd7f115657f2f69f0";
 const ADMIN_LOGIN = "hcosta";
 let adminLogin = null;
 let autoRefresh = null;
@@ -191,29 +121,18 @@ function showScreen(id) {
   document.getElementById(id).style.flexDirection = 'column';
 }
 
-document.getElementById('btn-login').addEventListener('click', () => {
-  const redirect = encodeURIComponent('https://42woman.netlify.app/admin.html');
-  window.location.href =
-    `https://api.intra.42.fr/oauth/authorize?client_id=${CLIENT_ID}` +
-    `&redirect_uri=${redirect}&response_type=code&scope=public`;
-});
-
 document.getElementById('btn-refresh').addEventListener('click', loadData);
 
 async function loadData() {
   try {
     const res = await fetch(`/.netlify/functions/admin-data?admin=${adminLogin}`);
     const { cadetes } = await res.json();
-
     const pending  = cadetes.filter(c => c.status === 'pending');
     const approved = cadetes.filter(c => c.status === 'approved');
-
     document.getElementById('count-pending').textContent  = pending.length;
     document.getElementById('count-approved').textContent = approved.length;
     document.getElementById('count-total').textContent    = cadetes.length;
     document.getElementById('pending-badge').textContent  = pending.length;
-
-    // Pendentes
     const pendingList = document.getElementById('pending-list');
     if (pending.length === 0) {
       pendingList.innerHTML = '<p class="empty-msg">Nenhuma cadete pendente. 🌸</p>';
@@ -234,8 +153,6 @@ async function loadData() {
         </div>
       `).join('');
     }
-
-    // Mural aprovadas
     const grid = document.getElementById('mural-grid');
     if (approved.length === 0) {
       grid.innerHTML = '<p class="empty-msg">Nenhuma cadete aprovada ainda.</p>';
@@ -247,12 +164,7 @@ async function loadData() {
         </div>
       `).join('');
     }
-
-    // Notificação título
-    document.title = pending.length > 0
-      ? `(${pending.length}) Women42 — Admin 👑`
-      : 'Women42 — Admin 👑';
-
+    document.title = pending.length > 0 ? `(${pending.length}) Women42 — Admin 👑` : 'Women42 — Admin 👑';
   } catch(e) { console.error(e); }
 }
 
