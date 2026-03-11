@@ -11,7 +11,7 @@ exports.handler = async (event) => {
 
   try {
     const { code } = JSON.parse(event.body);
-    if (!code) return { statusCode: 400, headers, body: JSON.stringify({ error: 'CÃ³digo em falta' }) };
+    if (!code) return { statusCode: 400, headers, body: JSON.stringify({ error: 'Código em falta' }) };
 
     const res = await fetch('https://api.intra.42.fr/oauth/token', {
       method: 'POST',
@@ -34,4 +34,3 @@ exports.handler = async (event) => {
     return { statusCode: 500, headers, body: JSON.stringify({ error: err.message }) };
   }
 };
-
