@@ -208,11 +208,13 @@
 <div class="screen" id="screen-blocked">
   <div class="blocked-card">
     <span class="blocked-emoji">🌹</span>
-    <h2 class="blocked-title">Área Reservada</h2>
+    <h2 class="blocked-title">Olá, Cadete!</h2>
     <p class="blocked-text">
-      Este espaço foi criado com todo o carinho<br>
-      exclusivamente para as nossas queridas colegas.<br><br>
-      <em>Obrigado por respeitares este momento especial delas.</em>
+      Infelizmente esta app é reservada<br>
+      exclusivamente às nossas queridas <strong>Cadetes</strong>.<br><br>
+      Foi criada com muito amor para celebrar<br>
+      as mulheres incríveis da nossa comunidade 42.<br><br>
+      <em>Obrigado por respeitares este momento especial delas. 💛</em>
     </p>
   </div>
 </div>
@@ -385,6 +387,39 @@ POEMA:
 }
 
 // ══════════════════════════════════════
+// NETLIFY — guardar/carregar mural
+// ══════════════════════════════════════
+async function saveMural(login, data) {
+  try {
+    await fetch('/.netlify/functions/mural', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ login, data })
+    });
+  } catch (e) { /* continua mesmo se falhar */ }
+  // Cache local sempre
+  localStorage.setItem(`women42_mural_${login}`, JSON.stringify(data));
+}
+
+async function loadMural(login) {
+  // Cache local primeiro (mais rápido)
+  const local = localStorage.getItem(`women42_mural_${login}`);
+  if (local) return JSON.parse(local);
+  // Tenta buscar do Netlify (outro dispositivo)
+  try {
+    const res = await fetch(`/.netlify/functions/mural?login=${encodeURIComponent(login)}`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.login) {
+        localStorage.setItem(`women42_mural_${login}`, JSON.stringify(data));
+        return data;
+      }
+    }
+  } catch (e) { /* sem mural guardado */ }
+  return null;
+}
+
+// ══════════════════════════════════════
 // RENDER
 // ══════════════════════════════════════
 function renderMural(d) {
@@ -417,29 +452,34 @@ async function main() {
     const token = await exchangeCode(code);
     const user  = await fetchUser(token);
 
-    // Verificar género
+    // Verificar género — se não for mulher, mostrar ecrã bloqueado
     const gender = (user.gender || '').toLowerCase();
-    if (gender && gender !== 'female' && gender !== 'f') {
+    const isFemale = gender === 'female' || gender === 'f' || gender === 'woman';
+    // Se género está definido e não é feminino → bloquear
+    // Se género está vazio → deixar passar (alguns perfis não têm género definido)
+    if (gender && !isFemale) {
       show('screen-blocked'); return;
     }
 
-    // Verificar se mural já existe
-    const key   = `women42_mural_${user.login}`;
-    const saved = localStorage.getItem(key);
-    if (saved) { renderMural(JSON.parse(saved)); return; }
-
-    // Gerar mural novo
     const firstName   = user.first_name || user.login;
     const displayName = `${user.first_name||''} ${user.last_name||''}`.trim() || user.login;
     const photo       = user.image?.versions?.medium || user.image?.link || '';
     const campus      = user.campus?.[0]?.name ? `📍 ${user.campus[0].name}` : '';
 
+    // Verificar se mural já existe no Netlify
+    setLoading('A procurar o teu mural...');
+    const saved = await loadMural(user.login);
+    if (saved) { renderMural(saved); return; }
+
+    // Gerar mural novo
     setLoading(`A criar o teu poema especial, ${firstName}... 🌸`);
 
     const { frase, poema } = await generateContent(firstName);
 
     const muralData = { login: user.login, displayName, photo, campus, frase, poema, createdAt: new Date().toISOString() };
-    localStorage.setItem(key, JSON.stringify(muralData));
+
+    // Guardar no Netlify (persistente em qualquer dispositivo)
+    await saveMural(user.login, muralData);
     renderMural(muralData);
 
   } catch (err) {
